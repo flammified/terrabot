@@ -1,6 +1,7 @@
 import socket
 import struct
 import threading
+import packets
 
 
 class TerraBot(threading.Thread):
@@ -20,6 +21,10 @@ class TerraBot(threading.Thread):
 
 		self.client = None
 
+
+	def initializeConnection(self):
+		p1 = packets.Packet1(self.protocol)
+
 	"""Connects to the server and starts the main loop"""
 	def startBot(self):
 		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,7 +34,9 @@ class TerraBot(threading.Thread):
 	
 	"""Running the bot with using start() will NOT work. Use startBot instead!"""
 	def run(self):
+		self.initializeConnection()
 		while self.running = True:
+
 
 	def stop(self):
 		self.running = True		
