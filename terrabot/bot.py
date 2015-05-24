@@ -2,6 +2,7 @@ import socket
 import struct
 import threading
 import packets
+import time
 
 
 class TerraBot(threading.Thread):
@@ -9,20 +10,22 @@ class TerraBot(threading.Thread):
 
 	#Defaults to 7777, because that is the default port for the server
 	def __init__(self, ip, port=7777, protocol=102, name="Terrabot"):
-		super(ClassName, self).__init__()
+		super(TerraBot, self).__init__()
 
 		self.HOST = ip
 		self.PORT = port
-		self.ADDR  = (HOST, PORT)
+		self.ADDR  = (self.HOST, self.PORT)
 
 		self.protocol = protocol
 		self.name = name
 		self.running = False
 
+		self.daemon = True
+
 		self.client = None
 
 
-	def initializeConnection(self):
+	def _initializeConnection(self):
 		p1 = packets.Packet1(self.protocol)
 
 	"""Connects to the server and starts the main loop"""
@@ -34,12 +37,13 @@ class TerraBot(threading.Thread):
 	
 	"""Running the bot with using start() will NOT work. Use startBot instead!"""
 	def run(self):
-		self.initializeConnection()
-		while self.running = True:
+		self._initializeConnection()
+		while self.running:
+			pass
 
 
 	def stop(self):
-		self.running = True		
+		self.running = False		
 
 
 		
