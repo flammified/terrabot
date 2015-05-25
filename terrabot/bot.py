@@ -3,6 +3,9 @@ import struct
 import threading
 import packets
 
+from player import Player
+from world 	import World
+
 class TerraBot(object):
 	"""A bot for a terraria server"""
 
@@ -21,14 +24,14 @@ class TerraBot(object):
 		self.writeThread = threading.Thread(target = self.readPackets)
 		self.writeThread.daemon = True
 
-		self.readThread = threading.Thread(target = self.sendPackets)
+		self.readThread = threading.Thread(target = self.writePackets)
 		self.readThread.daemon = True
 
 		self.client = None
 
 		self.writeQueue = []
 
-		#Information about the player
+		self.player = Player()
 
 
 	def _initializeConnection(self):
@@ -48,16 +51,22 @@ class TerraBot(object):
 		while self.running:
 			packet_length = self.client.recv(2)
 			packet_length = struct.unpack("<h", packet_length)[0]-2
-			print packet_length
-			data = self.client.recv(packet_length)
 
+			data = self.client.recv(packet_length)
 			command = ord(data[0])
 
-	def sendPackets(self):
+			#packetClass = getattr(packets, "Packet"+str(command))
+			#instantce = packetClass()
+
+	def writePackets(self):
 		while self.running:
 			if len(self.writeQueue) > 0:
 				self.writeQueue[0].send(self.client)
 				self.writeQueue.pop(0)
+
+
+	def addPacket(self, packet):
+		self.writeQueue.append(packet)
 
 	def stop(self):
 		self.running = False		
