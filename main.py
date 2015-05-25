@@ -30,12 +30,20 @@ if (__name__ == "__main__"):
 
 		"""
 
-		packet = terrabot.packets.packet1.Packet1(102)
+		packet = Packet1(102)
 		packet.send(client)
 
-		b1 = client.recv(1)
-		b2 = client.recv(1)
-		packet_length = struct.unpack("<h", b1+b2)[0] - 2
+
+		#b1 = client.recv(1)
+		#b2 = client.recv(1)
+
+		packet_length = client.recv(2)
+
+		packet_length =  struct.unpack("<h", packet_length)[0] - 2
+
+		print packet_length
+
+		#packet_length = struct.unpack("<h", b1+b2)[0] - 2
 		data = client.recv(packet_length)
 		command = ord(data[0])
 		
@@ -47,6 +55,6 @@ if (__name__ == "__main__"):
 		client.close()
 	else:
 		bot = TerraBot("192.168.200.83")
-		bot.startBot()
+		bot.start()
 		while threading.active_count() > 0:
 			time.sleep(0.1)

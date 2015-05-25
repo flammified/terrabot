@@ -26,6 +26,7 @@ class Packet(object):
 		self.addData(temp)
 
 	def addData(self, d):
+		#Pascal String: need to add the length
 		if isinstance(d, basestring):
 			d = chr(len(d)) + d
 		self.data.append(d)
