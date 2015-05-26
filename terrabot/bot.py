@@ -20,6 +20,8 @@ class TerraBot(object):
 		self.protocol = protocol
 		self.running = False
 
+		self.name = name
+
 		self.writeThread = threading.Thread(target = self.readPackets)
 		self.writeThread.daemon = True
 
