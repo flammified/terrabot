@@ -18,7 +18,6 @@ class TerraBot(object):
 		self.ADDR  = (self.HOST, self.PORT)
 
 		self.protocol = protocol
-		self.name = name
 		self.running = False
 
 		self.writeThread = threading.Thread(target = self.readPackets)
@@ -32,6 +31,9 @@ class TerraBot(object):
 		self.writeQueue = []
 
 		self.player = Player()
+
+		self.world 	= 	World()
+		self.player = 	Player(self.name)
 
 
 	def _initializeConnection(self):
@@ -55,8 +57,8 @@ class TerraBot(object):
 			data = self.client.recv(packet_length)
 			command = ord(data[0])
 
-			#packetClass = getattr(packets, "Packet"+str(command))
-			#instantce = packetClass()
+			packetClass = getattr(packets, "Packet"+str(command)+"Parser")
+			packetClass().parse(self.world, self.player, data)
 
 	def writePackets(self):
 		while self.running:

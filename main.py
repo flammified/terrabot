@@ -54,7 +54,7 @@ if (__name__ == "__main__"):
 
 		client.close()
 	else:
-		bot = TerraBot("192.168.200.83")
+		bot = TerraBot("127.0.0.1")
 		bot.start()
 		while threading.active_count() > 0:
 			time.sleep(0.1)

@@ -1,1 +1,2 @@
-from packet1 import Packet1
+from packet1 import *
+from packet3 import *
