@@ -37,10 +37,6 @@ class TerraBot(object):
 		self.world 	= 	World()
 		self.player = 	Player(self.name)
 
-
-	def _initializeConnection(self):
-		p1 = packets.Packet1(self.protocol)
-
 	"""Connects to the server and starts the main loop"""
 	def start(self):
 		if not self.writeThread.isAlive() and not self.readThread.isAlive():
@@ -49,25 +45,45 @@ class TerraBot(object):
 			self.running = True	
 			self.writeThread.start()
 			self.readThread.start()
-			self.writeQueue.append(packets.Packet1(self.protocol))
+			self.addPacket(packets.Packet1(self.protocol))
 
 	def readPackets(self):
 		while self.running:
 			packet_length = self.client.recv(2)
+			#print packet_length
 			packet_length = struct.unpack("<h", packet_length)[0]-2
-
 			data = self.client.recv(packet_length)
-			command = ord(data[0])
+			packno = data[0]
 
-			packetClass = getattr(packets, "Packet"+str(command)+"Parser")
+			#print format(ord(packno), 'x')
+			#print self.printHexArray(data[1:])
+
+			packetClass = getattr(packets, "Packet"+format(ord(packno), 'x')+"Parser")
+			#Packets have effect on three things: the bot, the world or the player.
 			packetClass().parse(self.world, self.player, data)
+			if ord(packno) == 3:
+				self.addPacket(packets.Packet4(self.player))
+				self.addPacket(packets.Packet10(self.player))
+				self.addPacket(packets.Packet2A(self.player))
+				self.addPacket(packets.Packet32(self.player))
+				for i in range(0, 73):
+					self.addPacket(packets.Packet5(self.player, i))
+				self.addPacket(packets.Packet6())
+
+				print "Send!"
 
 	def writePackets(self):
 		while self.running:
 			if len(self.writeQueue) > 0:
+				#print format(self.writeQueue[0].packetno, "x")
 				self.writeQueue[0].send(self.client)
 				self.writeQueue.pop(0)
 
+	def printHexArray(self, data):
+		str = ""
+		for i in data:
+			str += format(ord(i), "x")
+		return str
 
 	def addPacket(self, packet):
 		self.writeQueue.append(packet)

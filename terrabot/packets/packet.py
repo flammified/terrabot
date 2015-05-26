@@ -13,7 +13,7 @@ class Packet(object):
 			t = self.data[i]
 			if isinstance(t,basestring):
 				#Pascal String: length of the string in front of the string
-				length += len(t) + len(chr(len(t))) 
+				length += len(t)
 			elif isinstance(t, int):
 				length += 2
 			elif isinstance(t, bool):
@@ -21,14 +21,15 @@ class Packet(object):
 
 		return length
 
-	def addStructuredData(self, newData, structType):
+	def addStructuredData(self, structType, newData):
 		temp = struct.pack(structType, newData)
-		self.addData(temp)
+		self.data.append(temp)
 
 	def addData(self, d):
 		#Pascal String: need to add the length
 		if isinstance(d, basestring):
 			d = chr(len(d)) + d
+			print d
 
 		self.data.append(d)
 

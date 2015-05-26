@@ -6,9 +6,7 @@ class Player(object):
 			self.inventory.append("Dummy Item")
 
 		self.playerID = 0
-
-
-		self.hairStyle 	= 0
+		self.hairStyle 	= 0x33
 		self.gender 	= 1
 		self.hairColor 			= (255, 255, 255)
 		self.skinColor 			= (255, 255, 255)
@@ -18,7 +16,7 @@ class Player(object):
 		self.pantsColor 		= (255, 255, 255)
 		self.shoeColor 			= (255, 255, 255)
 		self.difficulty			= 0
-		self.name				= "Terrabot"
+		self.name				= "asdasd"
 
 		self.maxHP = 400
 		self.currHP = 300
