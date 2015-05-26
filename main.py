@@ -10,8 +10,12 @@ import sys
 if (__name__ == "__main__"):
 
 	RUN_FROM_MAIN = False
-	HOST = '192.168.200.83'
+
+	HOST = '127.0.0.1'
 	PORT = 7777
+
+	if (len(sys.argv) > 1):
+		HOST = sys.argv[1]
 	ADDR = (HOST, PORT)
 	protocol = 102
 
@@ -54,7 +58,7 @@ if (__name__ == "__main__"):
 
 		client.close()
 	else:
-		bot = TerraBot("127.0.0.1")
+		bot = TerraBot(HOST)
 		bot.start()
 		while threading.active_count() > 0:
 			time.sleep(0.1)
