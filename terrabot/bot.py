@@ -50,13 +50,12 @@ class TerraBot(object):
 	def readPackets(self):
 		while self.running:
 			packet_length = self.client.recv(2)
-			#print packet_length
 			packet_length = struct.unpack("<h", packet_length)[0]-2
 			data = self.client.recv(packet_length)
 			packno = data[0]
 
-			#print format(ord(packno), 'x')
-			#print self.printHexArray(data[1:])
+			print format(ord(packno), 'x')
+			print self.printHexArray(data[1:])
 
 			packetClass = getattr(packets, "Packet"+format(ord(packno), 'x')+"Parser")
 			#Packets have effect on three things: the bot, the world or the player.
@@ -75,7 +74,6 @@ class TerraBot(object):
 	def writePackets(self):
 		while self.running:
 			if len(self.writeQueue) > 0:
-				#print format(self.writeQueue[0].packetno, "x")
 				self.writeQueue[0].send(self.client)
 				self.writeQueue.pop(0)
 

@@ -16,7 +16,7 @@ class Player(object):
 		self.pantsColor 		= (255, 255, 255)
 		self.shoeColor 			= (255, 255, 255)
 		self.difficulty			= 0
-		self.name				= "asdasd"
+		self.name				= name
 
 		self.maxHP = 400
 		self.currHP = 300
