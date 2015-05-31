@@ -67,7 +67,7 @@ class TerraBot(object):
 				packetClass = getattr(packets, "Packet"+format(ord(packno), 'x').upper()+"Parser")
 				packetClass().parse(self.world, self.player, data)
 			except AttributeError:
-				print ord(packno)
+				pass
 
 			if ord(packno) == 2:
 				self.stop()
@@ -86,6 +86,7 @@ class TerraBot(object):
 				self.addPacket(packets.PacketC(self.player, self.world))
 				self.flag = True
 				self.addPacket(packets.Packet19(self.player))
+				self.addPacket(packets.Packet1E(self.player))
 
 
 	def writePackets(self):
