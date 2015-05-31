@@ -63,5 +63,5 @@ if (__name__ == "__main__"):
 	else:
 		bot = TerraBot(HOST, name=PLAYERNAME)
 		bot.start()
-		while threading.active_count() > 0:
+		while threading.active_count() > 1:
 			time.sleep(0.1)
