@@ -5,8 +5,11 @@ class Packet4(packet.Packet):
 	def __init__(self,  player):
 		super(Packet4, self).__init__(4)
 		self.addStructuredData("<c", chr(player.playerID))
-		self.addStructuredData("<c", chr(player.hairStyle))
 		self.addStructuredData("<c", chr(player.gender))
+		self.addStructuredData("<c", chr(player.hairStyle))
+		self.addData(player.name)
+		self.addStructuredData("<c", chr(0)) #HairStyle
+		self.addStructuredData("<c", chr(0)) #HideVisual?
 
 		self.addStructuredData("<c", chr(player.hairColor[0]))
 		self.addStructuredData("<c", chr(player.hairColor[1]))
@@ -38,6 +41,5 @@ class Packet4(packet.Packet):
 
 		self.addStructuredData("<c", chr(player.difficulty))
 
-		self.addData(player.name)
 
 

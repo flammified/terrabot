@@ -65,11 +65,10 @@ class TerraBot(object):
 				self.addPacket(packets.Packet10(self.player))
 				self.addPacket(packets.Packet2A(self.player))
 				self.addPacket(packets.Packet32(self.player))
-				for i in range(0, 73):
+				for i in range(0, 83):
 					self.addPacket(packets.Packet5(self.player, i))
 				self.addPacket(packets.Packet6())
-
-				print "Send!"
+				print "send"
 
 	def writePackets(self):
 		while self.running:
