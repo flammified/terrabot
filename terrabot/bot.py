@@ -38,6 +38,9 @@ class TerraBot(object):
 		self.world 	= 	World()
 		self.player = 	Player(self.name)
 
+		self.flag = False
+
+
 	"""Connects to the server and starts the main loop"""
 	def start(self):
 		if not self.writeThread.isAlive() and not self.readThread.isAlive():
@@ -57,9 +60,12 @@ class TerraBot(object):
 
 			print format(ord(packno), 'x')
 
-			packetClass = getattr(packets, "Packet"+format(ord(packno), 'x').upper()+"Parser")
-			#Packets have effect on three things: the bot, the world or the player.
-			packetClass().parse(self.world, self.player, data)
+			try:
+				packetClass = getattr(packets, "Packet"+format(ord(packno), 'x').upper()+"Parser")
+				packetClass().parse(self.world, self.player, data)
+			except AttributeError:
+				pass
+
 			if ord(packno) == 2:
 				self.stop()
 			if ord(packno) == 3:
@@ -70,12 +76,13 @@ class TerraBot(object):
 				for i in range(0, 83):
 					self.addPacket(packets.Packet5(self.player, i))
 				self.addPacket(packets.Packet6())
-				print "send"
 			if ord(packno) == 7 and not self.initialized:
-				print self.world.spawnX
 				self.addPacket(packets.Packet8(self.player, self.world))
-			if ord(packno) == 7 and self.initialized:
-				self.addPacket(packets.PacketC(self.player, selfworld))
+				self.initialized = True
+			if ord(packno) == 7 and self.initialized and not self.flag:
+				self.addPacket(packets.PacketC(self.player, self.world))
+				self.flag = True
+
 
 	def writePackets(self):
 		while self.running:

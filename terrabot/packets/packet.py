@@ -31,7 +31,6 @@ class Packet(object):
 	def send(self, client):
 		#Adding two, because the length of the packet is also part of the packet
 		packet = struct.pack("<h", self._calculateLength()+3)
-		print format(self.packetno,"x") + " " +  str(self._calculateLength() + 3)
 		packet += chr(self.packetno)
 		for i in range(len(self.data)):
 			packet += str(self.data[i][0])

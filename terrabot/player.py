@@ -6,7 +6,7 @@ class Player(object):
 			self.inventory.append("Dummy Item")
 
 		self.playerID = 0
-		self.hairStyle 	= 0x33
+		self.hairStyle 	= 0x0
 		self.gender 	= 1
 		self.hairColor 			= (255, 255, 255)
 		self.skinColor 			= (255, 255, 255)

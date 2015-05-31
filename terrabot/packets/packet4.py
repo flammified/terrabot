@@ -9,7 +9,7 @@ class Packet4(packet.Packet):
 		self.addData(chr(player.hairStyle))
 		self.addData(player.name, pascalString=True)
 		self.addData(chr(0)) #HairStyle
-		self.addData(chr(0)) #HideVisual?
+		self.addData(chr(1)) #HideVisual?
 
 		self.addData(chr(player.hairColor[0]))
 		self.addData(chr(player.hairColor[1]))

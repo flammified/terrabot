@@ -5,4 +5,11 @@ class PacketD(packet.Packet):
 	def __init__(self,  player):
 		super(PacketC, self).__init__(0xD)
 		self.addData(chr(player.playerID))
-		self.addData(chr(D))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
+		self.addData(chr(255))
