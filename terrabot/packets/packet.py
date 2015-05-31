@@ -26,6 +26,7 @@ class Packet(object):
 		if pascalString:
 			d = chr(length) + d
 			length = len(d)
+			print d
 		self.data.append((d, length))
 
 	def send(self, client):

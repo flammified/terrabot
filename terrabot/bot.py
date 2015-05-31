@@ -55,16 +55,19 @@ class TerraBot(object):
 		while self.running:
 			packet_length = self.client.recv(2)
 			packet_length = struct.unpack("<h", packet_length)[0]-2
+
+			#print "Length: " + str(packet_length-2)
+
 			data = self.client.recv(packet_length)
 			packno = data[0]
 
-			print format(ord(packno), 'x')
+			#print format(ord(packno), "x")
 
 			try:
 				packetClass = getattr(packets, "Packet"+format(ord(packno), 'x').upper()+"Parser")
 				packetClass().parse(self.world, self.player, data)
 			except AttributeError:
-				pass
+				print ord(packno)
 
 			if ord(packno) == 2:
 				self.stop()
@@ -82,6 +85,7 @@ class TerraBot(object):
 			if ord(packno) == 7 and self.initialized and not self.flag:
 				self.addPacket(packets.PacketC(self.player, self.world))
 				self.flag = True
+				self.addPacket(packets.Packet19(self.player))
 
 
 	def writePackets(self):
