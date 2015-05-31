@@ -10,7 +10,7 @@ class TerraBot(object):
 	"""A bot for a terraria server"""
 
 	#Defaults to 7777, because that is the default port for the server
-	def __init__(self, ip, port=7777, protocol=102, name="Terrabot"):
+	def __init__(self, ip, port=7777, protocol=102, name="Terrabot1"):
 		super(TerraBot, self).__init__()
 
 		self.HOST = ip
@@ -55,7 +55,6 @@ class TerraBot(object):
 			packno = data[0]
 
 			print format(ord(packno), 'x')
-			print self.printHexArray(data[1:])
 
 			packetClass = getattr(packets, "Packet"+format(ord(packno), 'x')+"Parser")
 			#Packets have effect on three things: the bot, the world or the player.

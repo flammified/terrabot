@@ -19,19 +19,19 @@ class Packet(object):
 		temp = struct.pack(structType, newData)
 		self.data.append((temp, struct.calcsize(structType)))
 
-	def addData(self, d):
+	def addData(self, d, pascalString=False):
 		#Pascal String: need to add the length
 
 		length = len(d)
-		if isinstance(d, basestring):
+		if pascalString:
 			d = chr(length) + d
-
+			length = len(d)
 		self.data.append((d, length))
 
 	def send(self, client):
 		#Adding two, because the length of the packet is also part of the packet
-		packet = struct.pack("<h", self._calculateLength()+2)
-		print format(self.packetno,"x") + " " +  str(self._calculateLength() + 2)
+		packet = struct.pack("<h", self._calculateLength()+3)
+		print format(self.packetno,"x") + " " +  str(self._calculateLength() + 3)
 		packet += chr(self.packetno)
 		for i in range(len(self.data)):
 			packet += str(self.data[i][0])
