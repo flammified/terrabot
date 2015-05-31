@@ -11,8 +11,9 @@ class Packet19(packet.Packet):
 
 	def __init__(self,  player):
 		super(Packet19, self).__init__(0x19)
+		self.addData(chr(player.playerID))
 		self.addData(chr(1))
 		self.addData(chr(1))
 		self.addData(chr(1))
-		self.addData("This is a text message", pascalString=False)
+		self.addData(":)", pascalString=True)
 

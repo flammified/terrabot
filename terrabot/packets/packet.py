@@ -24,9 +24,9 @@ class Packet(object):
 
 		length = len(d)
 		if pascalString:
+			print d
 			d = chr(length) + d
 			length = len(d)
-			print d
 		self.data.append((d, length))
 
 	def send(self, client):
