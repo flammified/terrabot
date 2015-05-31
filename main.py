@@ -13,9 +13,12 @@ if (__name__ == "__main__"):
 
 	HOST = '127.0.0.1'
 	PORT = 7777
+	PLAYERNAME = 'Terrabot'
 
 	if (len(sys.argv) > 1):
 		HOST = sys.argv[1]
+	if (len(sys.argv) > 2):
+		PLAYERNAME = sys.argv[2]
 	ADDR = (HOST, PORT)
 	protocol = 102
 
@@ -58,7 +61,7 @@ if (__name__ == "__main__"):
 
 		client.close()
 	else:
-		bot = TerraBot(HOST)
+		bot = TerraBot(HOST, name=PLAYERNAME)
 		bot.start()
 		while threading.active_count() > 0:
 			time.sleep(0.1)
