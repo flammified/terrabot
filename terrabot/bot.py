@@ -59,6 +59,8 @@ class TerraBot(object):
 			packetClass = getattr(packets, "Packet"+format(ord(packno), 'x')+"Parser")
 			#Packets have effect on three things: the bot, the world or the player.
 			packetClass().parse(self.world, self.player, data)
+			if ord(packno) == 2:
+				self.stop()
 			if ord(packno) == 3:
 				self.addPacket(packets.Packet4(self.player))
 				self.addPacket(packets.Packet10(self.player))
