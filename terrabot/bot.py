@@ -54,6 +54,10 @@ class TerraBot(object):
 	def readPackets(self):
 		while self.running:
 			packet_length = self.client.recv(2)
+			if len(packet_length) < 2:
+				print ord(packet_length)
+				self.stop()
+				continue
 			packet_length = struct.unpack("<h", packet_length)[0]-2
 
 			#print "Length: " + str(packet_length-2)
@@ -71,6 +75,7 @@ class TerraBot(object):
 
 			if ord(packno) == 2:
 				self.stop()
+				continue
 			if ord(packno) == 3:
 				self.addPacket(packets.Packet4(self.player))
 				self.addPacket(packets.Packet10(self.player))
@@ -94,6 +99,9 @@ class TerraBot(object):
 			if len(self.writeQueue) > 0:
 				self.writeQueue[0].send(self.client)
 				self.writeQueue.pop(0)
+
+	def message(self, msg):
+		self.addPacket(packets.Packet19(self.player, msg))
 
 	def printHexArray(self, data):
 		str = ""

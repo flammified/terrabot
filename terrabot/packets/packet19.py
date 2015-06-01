@@ -9,11 +9,11 @@ class Packet19Parser(object):
 
 class Packet19(packet.Packet):
 
-	def __init__(self,  player):
+	def __init__(self,  player, msg=":)"):
 		super(Packet19, self).__init__(0x19)
 		self.addData(chr(player.playerID))
 		self.addData(chr(1))
 		self.addData(chr(1))
 		self.addData(chr(1))
-		self.addData(":)", pascalString=True)
+		self.addData(msg, pascalString=True)
 
