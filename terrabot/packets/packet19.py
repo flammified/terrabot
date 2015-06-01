@@ -4,7 +4,8 @@ import packet
 class Packet19Parser(object):
 
 	def parse(self, world, player, data):
-		print data[6:]
+		if data[1] != player.playerID:
+			print data[6:]
 
 
 class Packet19(packet.Packet):

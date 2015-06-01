@@ -23,5 +23,10 @@ if (__name__ == "__main__"):
 	while threading.active_count() > 1:
 		while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 			line = sys.stdin.readline()
+			line = line.rstrip()
 			if line:
-				bot.message(line.rstrip())
+				if line == "stop":
+					bot.stop()
+				else:
+					print
+					bot.message(line)

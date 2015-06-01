@@ -11,6 +11,3 @@ class Packet7Parser(object):
 		world.spawnX = struct.unpack("<h", data[11:13])[0]
 		world.spawnY = struct.unpack("<h", data[13:15])[0]
 
-		print world.spawnX
-		print world.spawnY
-
