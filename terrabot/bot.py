@@ -4,118 +4,112 @@ import threading
 import packets
 
 from player import Player
-from world 	import World
+from world import World
+
 
 class TerraBot(object):
-	"""A bot for a terraria server"""
+    """A bot for a terraria server"""
 
-	#Defaults to 7777, because that is the default port for the server
-	def __init__(self, ip, port=7777, protocol=102, name="Terrabot"):
-		super(TerraBot, self).__init__()
+    # Defaults to 7777, because that is the default port for the server
+    def __init__(self, ip, port=7777, protocol=149, name="Terrabot"):
+        super(TerraBot, self).__init__()
 
-		self.HOST = ip
-		self.PORT = port
-		self.ADDR  = (self.HOST, self.PORT)
+        self.HOST = ip
+        self.PORT = port
+        self.ADDR = (self.HOST, self.PORT)
 
-		self.protocol = protocol
-		self.running = False
+        self.protocol = protocol
+        self.running = False
 
-		self.name = name
+        self.name = name
 
-		self.writeThread = threading.Thread(target = self.readPackets)
-		self.writeThread.daemon = True
+        self.writeThread = threading.Thread(target=self.read_packets)
+        self.writeThread.daemon = True
 
-		self.readThread = threading.Thread(target = self.writePackets)
-		self.readThread.daemon = True
+        self.readThread = threading.Thread(target=self.write_packets)
+        self.readThread.daemon = True
 
-		self.client = None
-		self.initialized = False
+        self.client = None
+        self.initialized = False
 
-		self.writeQueue = []
+        self.writeQueue = []
 
-		self.player = Player()
+        self.player = Player()
 
-		self.world 	= 	World()
-		self.player = 	Player(self.name)
+        self.world = World()
+        self.player = Player(self.name)
 
-		self.flag = False
+        self.flag = False
 
+    """Connects to the server and starts the main loop"""
+    def start(self):
+        if not self.writeThread.isAlive() and not self.readThread.isAlive():
+            self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.client.connect(self.ADDR)
+            self.running = True
+            self.writeThread.start()
+            self.readThread.start()
+            self.add_packet(packets.Packet1(self.protocol))
 
-	"""Connects to the server and starts the main loop"""
-	def start(self):
-		if not self.writeThread.isAlive() and not self.readThread.isAlive():
-			self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			self.client.connect(self.ADDR)
-			self.running = True	
-			self.writeThread.start()
-			self.readThread.start()
-			self.addPacket(packets.Packet1(self.protocol))
+    def read_packets(self):
+        while self.running:
+            packet_length = self.client.recv(2)
+            if len(packet_length) < 2:
+                print ord(packet_length)
+                self.stop()
+                continue
+            packet_length = struct.unpack("<h", packet_length)[0] - 2
 
-	def readPackets(self):
-		while self.running:
-			packet_length = self.client.recv(2)
-			if len(packet_length) < 2:
-				print ord(packet_length)
-				self.stop()
-				continue
-			packet_length = struct.unpack("<h", packet_length)[0]-2
+            # print "Length: " + str(packet_length-2)
 
-			#print "Length: " + str(packet_length-2)
+            data = self.client.recv(packet_length)
+            packno = data[0]
 
-			data = self.client.recv(packet_length)
-			packno = data[0]
+            # print format(ord(packno), "x")
+            try:
+                parser = "Packet" + format(ord(packno), 'x').upper() + "Parser"
+                packet_class = getattr(packets, parser)
+                packet_class().parse(self.world, self.player, data)
+            except AttributeError:
+                pass
 
-			#print format(ord(packno), "x")
+            if ord(packno) == 2:
+                self.stop()
+                continue
+            if ord(packno) == 3:
+                self.add_packet(packets.Packet4(self.player))
+                self.add_packet(packets.Packet10(self.player))
+                self.add_packet(packets.Packet2A(self.player))
+                self.add_packet(packets.Packet32(self.player))
+                for i in range(0, 83):
+                    self.add_packet(packets.Packet5(self.player, i))
+                self.add_packet(packets.Packet6())
+            if ord(packno) == 7 and not self.initialized:
+                self.add_packet(packets.Packet8(self.player, self.world))
+                self.initialized = True
+            if ord(packno) == 7 and self.initialized and not self.flag:
+                self.add_packet(packets.PacketC(self.player, self.world))
+                self.flag = True
+                self.add_packet(packets.Packet19(self.player))
+                self.add_packet(packets.Packet1E(self.player))
 
-			try:
-				packetClass = getattr(packets, "Packet"+format(ord(packno), 'x').upper()+"Parser")
-				packetClass().parse(self.world, self.player, data)
-			except AttributeError:
-				pass
+    def write_packets(self):
+        while self.running:
+            if len(self.writeQueue) > 0:
+                self.writeQueue[0].send(self.client)
+                self.writeQueue.pop(0)
 
-			if ord(packno) == 2:
-				self.stop()
-				continue
-			if ord(packno) == 3:
-				self.addPacket(packets.Packet4(self.player))
-				self.addPacket(packets.Packet10(self.player))
-				self.addPacket(packets.Packet2A(self.player))
-				self.addPacket(packets.Packet32(self.player))
-				for i in range(0, 83):
-					self.addPacket(packets.Packet5(self.player, i))
-				self.addPacket(packets.Packet6())
-			if ord(packno) == 7 and not self.initialized:
-				self.addPacket(packets.Packet8(self.player, self.world))
-				self.initialized = True
-			if ord(packno) == 7 and self.initialized and not self.flag:
-				self.addPacket(packets.PacketC(self.player, self.world))
-				self.flag = True
-				self.addPacket(packets.Packet19(self.player))
-				self.addPacket(packets.Packet1E(self.player))
+    def message(self, msg):
+        self.add_packet(packets.Packet19(self.player, msg))
 
+    def print_hex_array(self, data):
+        str = ""
+        for i in data:
+            str += format(ord(i), "x")
+        return str
 
-	def writePackets(self):
-		while self.running:
-			if len(self.writeQueue) > 0:
-				self.writeQueue[0].send(self.client)
-				self.writeQueue.pop(0)
+    def add_packet(self, packet):
+        self.writeQueue.append(packet)
 
-	def message(self, msg):
-		self.addPacket(packets.Packet19(self.player, msg))
-
-	def printHexArray(self, data):
-		str = ""
-		for i in data:
-			str += format(ord(i), "x")
-		return str
-
-	def addPacket(self, packet):
-		self.writeQueue.append(packet)
-
-	def stop(self):
-		self.running = False		
-
-
-		
-
-		
+    def stop(self):
+        self.running = False
