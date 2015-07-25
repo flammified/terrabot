@@ -6,11 +6,13 @@ class Packet4(packet.Packet):
     def __init__(self, player):
         super(Packet4, self).__init__(4)
         self.add_data(chr(player.playerID))
-        self.add_data(chr(4))  # player.gender))
+        self.add_data(chr(4))  # Skin
         self.add_data(chr(player.hairStyle))
         self.add_data(player.name, pascal_string=True)
         self.add_data(chr(0))  # HairStyle
         self.add_data(chr(1))  # HideVisual?
+        self.add_data(chr(1))  # HideVisual2?
+        self.add_data(chr(0))  # Hide miscs
 
         self.add_data(chr(player.hairColor[0]))
         self.add_data(chr(player.hairColor[1]))
