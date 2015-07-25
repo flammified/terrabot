@@ -5,6 +5,6 @@ class PacketC(packet.Packet):
 
     def __init__(self, player, world):
         super(PacketC, self).__init__(0xC)
-        self.addData(chr(player.playerID))
-        self.addStructuredData("<h", world.spawnX)
-        self.addStructuredData("<h", world.spawnY)
+        self.add_data(chr(player.playerID))
+        self.add_structured_data("<h", world.spawnX)
+        self.add_structured_data("<h", world.spawnY)

@@ -11,7 +11,7 @@ class TerraBot(object):
     """A bot for a terraria server"""
 
     # Defaults to 7777, because that is the default port for the server
-    def __init__(self, ip, port=7777, protocol=149, name="Terrabot"):
+    def __init__(self, ip, port=7777, protocol=155, name="Terrabot"):
         super(TerraBot, self).__init__()
 
         self.HOST = ip
@@ -33,8 +33,6 @@ class TerraBot(object):
         self.initialized = False
 
         self.writeQueue = []
-
-        self.player = Player()
 
         self.world = World()
         self.player = Player(self.name)
@@ -76,6 +74,7 @@ class TerraBot(object):
             if ord(packno) == 2:
                 self.stop()
                 continue
+
             if ord(packno) == 3:
                 self.add_packet(packets.Packet4(self.player))
                 self.add_packet(packets.Packet10(self.player))
@@ -84,9 +83,11 @@ class TerraBot(object):
                 for i in range(0, 83):
                     self.add_packet(packets.Packet5(self.player, i))
                 self.add_packet(packets.Packet6())
+
             if ord(packno) == 7 and not self.initialized:
                 self.add_packet(packets.Packet8(self.player, self.world))
                 self.initialized = True
+
             if ord(packno) == 7 and self.initialized and not self.flag:
                 self.add_packet(packets.PacketC(self.player, self.world))
                 self.flag = True

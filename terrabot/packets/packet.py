@@ -22,20 +22,20 @@ class Packet(object):
         self.data.append((temp, struct.calcsize(struct_type)))
 
     def add_data(self, d, pascal_string=False):
-        # Pascal String: need to add the length
-
+        # Pascal String: need to add the length using a signed
+        # char
         length = len(d)
         if pascal_string:
-            d = chr(length) + d
+            print d
+            d = struct.pack('<b', length) + d
             length = len(d)
         self.data.append((d, length))
 
     def send(self, client):
-        # Adding 3, because the length of the packet and packno
-        # are also part of the packet
+        # Adding 3, because the length of the packet (short) and packno
+        # (a byte) are also part of the packet
         packet = struct.pack("<h", self._calculate_length() + 3)
         packet += chr(self.packetno)
-        print self.data
         for i in range(len(self.data)):
             packet += str(self.data[i][0])
         client.send(packet)
