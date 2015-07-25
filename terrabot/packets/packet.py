@@ -26,7 +26,6 @@ class Packet(object):
         # char
         length = len(d)
         if pascal_string:
-            print d
             d = struct.pack('<b', length) + d
             length = len(d)
         self.data.append((d, length))

@@ -2,7 +2,7 @@ import struct
 
 
 class Streamer(object):
-    """A class for streaming numbers from a databuffer."""
+    """A class for streaming data from a databuffer."""
 
     def __init__(self, data):
         self.data = data
