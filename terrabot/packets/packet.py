@@ -15,7 +15,6 @@ class Packet(object):
             t = self.data[i]
             length += t[1]
 
-        print length
         return length
 
     def add_structured_data(self, struct_type, new_data):
