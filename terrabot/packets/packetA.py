@@ -1,6 +1,7 @@
 import struct
-from terrabot.util.streamer import Streamer
 import PIL
+import zlib
+from terrabot.util.streamer import Streamer
 
 class PacketAParser(object):
 
@@ -13,8 +14,13 @@ class PacketAParser(object):
         if compressed:
             #I dont actually care about compressed packets right now
             #because I dont know how they work yet
-            return
-        print "Non-compressed\n"
+            #return
+            pass
+        print "Compressed: " + str(compressed)
+
+        compressedData = streamer.remainder()
+        data = zlib.decompress(compressedData, -zlib.MAX_WBITS);
+        streamer =  Streamer(data)
 
         startx  = streamer.next_int32()
         starty  = streamer.next_int32()
@@ -53,6 +59,8 @@ class PacketAParser(object):
                     type = streamer.next_byte()
 
                 print type
+
+        print "--------"
 
 
 
