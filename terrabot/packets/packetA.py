@@ -1,4 +1,3 @@
-import struct
 import PIL
 import zlib
 from terrabot.util.streamer import Streamer
@@ -11,39 +10,38 @@ class PacketAParser(object):
         tiles = []
         compressed = streamer.next_byte()
 
-        if compressed:
-            #I dont actually care about compressed packets right now
-            #because I dont know how they work yet
-            #return
-            pass
         print "Compressed: " + str(compressed)
 
-        compressedData = streamer.remainder()
-        data = zlib.decompress(compressedData, -zlib.MAX_WBITS);
-        streamer =  Streamer(data)
+        compressed_data = streamer.remainder()
+        data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
+        streamer = Streamer(data)
 
-        startx  = streamer.next_int32()
-        starty  = streamer.next_int32()
-        width   = streamer.next_short()
-        height  = streamer.next_short()
+        startx = streamer.next_int32()
+        starty = streamer.next_int32()
+        width = streamer.next_short()
+        height = streamer.next_short()
 
         print "StartX: " + str(startx)
         print "StartY: " + str(starty)
         print "Width: " + str(width)
         print "height: " + str(height)
 
-
         for i in range(0,height):
             tiles.append([])
 
+        repeat_count = 0
+        last_tile = None
         for y in range(0, height):
             for x in range(0, width):
-                #Read a tile!
-                flag    = streamer.next_byte()
-                active  = flag & 2  > 0
-                flag2   = flag & 1  > 0
-                isShort = flag & 32 > 0
-                hasColor    = False
+                if repeat_count > 0:
+                    repeat_count -= 1
+                    tiles[x][y] = last_tile
+                    continue
+                flag = streamer.next_byte()
+                active = flag & 2 > 0
+                flag2 = flag & 1 > 0
+                is_short = flag & 32 > 0
+                has_color = False
                 color = (0, 0, 0)
 
                 if flag2:
@@ -51,26 +49,22 @@ class PacketAParser(object):
                     flag3 = flag2 & 1 > 0
                     if flag3:
                         flag3 = streamer.next_byte()
-                        hasColor = flag3 & 8 > 0
+                        has_color = flag3 & 8 > 0
 
-                if isShort:
-                    type = streamer.next_short()
+                if is_short:
+                    t = streamer.next_short()
                 else:
-                    type = streamer.next_byte()
+                    t = streamer.next_byte()
 
-                print type
+                last_tile = tiles[x][y]
 
         print "--------"
 
 
-
-
-#Temporary class, will be moved to own file later on
+# Temporary class, will be moved to own file later on
 class Tile(object):
-    def __init__(self, x, y, type, color=(0,0,0)):
+    def __init__(self, x, y, t, color=(0, 0, 0)):
         self.x = x
         self.y = y
-        self.type = type
+        self.type = t
         self.color = color
-
-
