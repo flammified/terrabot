@@ -13,6 +13,11 @@ class Streamer(object):
         self.index += 2
         return result
 
+    def next_u_short(self):
+        result = struct.unpack("<H", self.data[self.index: self.index + 2])[0]
+        self.index += 2
+        return result
+
     def next_int32(self):
         result = struct.unpack("<i", self.data[self.index: self.index + 4])[0]
         self.index += 4
