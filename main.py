@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     HOST = '127.0.0.1'
     PORT = 7777
-    PROTOCOL = 102
+    PROTOCOL = 155
     PLAYERNAME = 'Terrabot'
 
     if len(sys.argv) > 1:
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 3:
         PORT = sys.argv[3]
 
-    bot = TerraBot(HOST, port=PORT, name=PLAYERNAME)
+    bot = TerraBot(HOST, port=PORT, name=PLAYERNAME, protocol=PROTOCOL)
     bot.start()
     while threading.active_count() > 1:
        pass
