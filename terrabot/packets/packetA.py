@@ -25,29 +25,45 @@ class PacketAParser(object):
         print "StartX: " + str(startx)
         print "StartY: " + str(starty)
         print "Width: " + str(width)
-        print "height: " + str(height)
+        print "Height: " + str(height)
+        print "ByteLength: " + str(len(streamer.remainder()))
 
-        for i in range(0,height):
+        for i in range(0, height):
             tiles.append([])
 
         repeat_count = 0
         last_tile = None
+
         for y in range(0, height):
             for x in range(0, width):
                 if repeat_count > 0:
                     repeat_count -= 1
-                    tiles[y].add(last_tile)
+                    tiles[y].append(last_tile)
+                    x += 1
+                    if x > width:
+                        y += 1
                     continue
+
                 flag = streamer.next_byte()
-                active = flag & 2 == 1
-                flag2_exists = flag & 1 == 1
-                is_short = flag & 32 == 1
-                has_wall = flag & 4 == 1
-                repeat_value_present = flag & 64 == 1
-                extra_repeat_value = flag & 128 == 1
+                flag2 = streamer.next_byte()
+                flag3 = streamer.next_byte()
+
+                active = flag & 2 > 0
+                is_short = flag & 32 > 1
+                liquid = flag & 8 > 1
+                has_wall = flag & 4 > 1
+                repeat_value_present = flag & 64 > 1
+                extra_repeat_value = (flag & 128) > 0
+
+                wire = flag2 & 2 == 1
+                wire2 = flag2 & 4 == 1
+                wire3 = flag2 & 8 == 1
+
+                has_color = flag3 & 8 == 1
+                has_wall_color = flag3 & 16 == 1
 
                 frame_y = 0
-                frame_y = 0
+                frame_x = 0
                 wall = 0
                 wall_color = 0
                 tile_type = 0
@@ -57,13 +73,6 @@ class PacketAParser(object):
                 has_wall_color = False
 
                 if active:
-                    if flag2_exists:
-                        flag2 = streamer.next_byte()
-                        flag3 = flag2 & 1 == 1
-                        if flag3:
-                            flag3 = streamer.next_byte()
-                            has_color = flag3 & 8 == 1
-                            has_wall_color = flag3 & 16 == 1
                     if is_short:
                         t = streamer.next_short()
                     else:
@@ -71,16 +80,33 @@ class PacketAParser(object):
                     if frame_important:
                         frame_x = streamer.read_short()
                         frame_y = streamer.read_short()
-                if has_color:
-                    color = (streamer.next_short(), streamer.next_short(), streamer.next_short())
+                    if has_color:
+                        color = streamer.next_byte()
                 if has_wall:
                     wall = streamer.next_byte()
                 if has_wall and has_wall_color:
-                    wall_color = (streamer.next_short(), streamer.next_short(), streamer.next_short())
-
-                temp_tile = Tile()
+                    wall_color = streamer.next_byte()
+                if liquid:
+                    streamer.next_byte()
+                if wire:
+                    streamer.next_byte()
+                if wire2:
+                    streamer.next_byte()
+                if wire3:
+                    streamer.next_byte()
+                if repeat_value_present:
+                    if extra_repeat_value:
+                        repeat_count = streamer.next_short()
+                    else:
+                        repeat_count = streamer.next_byte()
+                temp_tile = Tile(x, y)
                 last_tile = temp_tile
-                tiles[y].add(temp_tile)
+                tiles[y].append(temp_tile)
+                #print str(len(streamer.remainder()))
+                #print "XY: " + str(x) + " : " + str(y) + " Rem: " + str(len(streamer.remainder()))
+
+        #print "Width: " + str(len(tiles[0]))
+        #print "Height: " + str(len(tiles))
 
         print "--------"
 
