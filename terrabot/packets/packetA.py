@@ -1,12 +1,13 @@
 import PIL
 import zlib
+from terrabot.util.tileutil import *
 from terrabot.util.streamer import Streamer
 
-class PacketAParser(object):
 
+class PacketAParser(object):
     def parse(self, world, player, data):
         streamer = Streamer(data)
-        streamer.next_byte() #Skip packet number byte
+        streamer.next_byte()  # Skip packet number byte
         tiles = []
         compressed = streamer.next_byte()
 
@@ -34,14 +35,18 @@ class PacketAParser(object):
         repeat_count = 0
         last_tile = None
 
-        for y in range(0, height):
-            for x in range(0, width):
+        x = 0
+        y = 0
+
+        while y < height:
+            while x < width:
                 if repeat_count > 0:
                     repeat_count -= 1
                     tiles[y].append(last_tile)
                     x += 1
                     if x > width:
                         y += 1
+                        x = 0
                     continue
 
                 flag = streamer.next_byte()
@@ -49,43 +54,43 @@ class PacketAParser(object):
                 flag3 = streamer.next_byte()
 
                 active = flag & 2 > 0
-                is_short = flag & 32 > 1
-                liquid = flag & 8 > 1
-                has_wall = flag & 4 > 1
-                repeat_value_present = flag & 64 > 1
-                extra_repeat_value = (flag & 128) > 0
+                has_wall = flag & 4 > 0
+                liquid = flag & 8 > 0
+                is_short = flag & 32 > 0
+                repeat_value_present = flag & 64 > 0
+                extra_repeat_value = flag & 128 > 0
 
-                wire = flag2 & 2 == 1
-                wire2 = flag2 & 4 == 1
-                wire3 = flag2 & 8 == 1
+                if not repeat_value_present and extra_repeat_value:
+                    print "WTF"
 
-                has_color = flag3 & 8 == 1
-                has_wall_color = flag3 & 16 == 1
+                wire = flag2 & 2 > 0
+                wire2 = flag2 & 4 > 0
+                wire3 = flag2 & 8 > 0
+
+                has_color = flag3 & 8 > 0
+                has_wall_color = flag3 & 16 > 0
 
                 frame_y = 0
                 frame_x = 0
                 wall = 0
                 wall_color = 0
                 tile_type = 0
-                frame_important = False
                 color = (0, 0, 0)
-                has_color = False
-                has_wall_color = False
 
                 if active:
                     if is_short:
-                        t = streamer.next_short()
+                        tile_type = streamer.next_short()
                     else:
-                        t = streamer.next_byte()
-                    if frame_important:
-                        frame_x = streamer.read_short()
-                        frame_y = streamer.read_short()
-                    if has_color:
-                        color = streamer.next_byte()
+                        tile_type = streamer.next_byte()
+                    if tile_type in frameImportant:
+                        frame_x = streamer.next_short()
+                        frame_y = streamer.next_short()
+                if has_color:
+                    color = streamer.next_byte()
                 if has_wall:
                     wall = streamer.next_byte()
-                if has_wall and has_wall_color:
-                    wall_color = streamer.next_byte()
+                    if has_wall_color:
+                        wall_color = streamer.next_byte()
                 if liquid:
                     streamer.next_byte()
                 if wire:
@@ -99,23 +104,22 @@ class PacketAParser(object):
                         repeat_count = streamer.next_short()
                     else:
                         repeat_count = streamer.next_byte()
-                temp_tile = Tile(x, y)
+                temp_tile = Tile()
                 last_tile = temp_tile
                 tiles[y].append(temp_tile)
-                #print str(len(streamer.remainder()))
-                #print "XY: " + str(x) + " : " + str(y) + " Rem: " + str(len(streamer.remainder()))
-
-        #print "Width: " + str(len(tiles[0]))
-        #print "Height: " + str(len(tiles))
-
-        print "--------"
+                x += 1
+            y += 1
+            x = 0
+            # print str(len(streamer.remainder()))
+            # print "XY: " + str(x) + " : " + str(y) + " Rem: " + str(len(streamer.remainder()))
+        # print "Width: " + str(len(tiles[0]))
+        # print "Height: " + str(len(tiles))
+        print "-------------------------"
 
 
 # Temporary class, will be moved to own file later on
 class Tile(object):
-    def __init__(self, x, y, active=True, tile_type=0, color=(0, 0, 0)):
-        self.x = x
-        self.y = y
+    def __init__(self, active=True, tile_type=0, color=(0, 0, 0)):
         self.active = active
         self.type = tile_type
         self.color = color
