@@ -1,4 +1,4 @@
-import PIL
+from PIL import Image, ImageDraw
 import zlib
 from terrabot.util.tileutil import *
 from terrabot.util.streamer import Streamer
@@ -29,6 +29,9 @@ class PacketAParser(object):
         print "Height: " + str(height)
         #print "ByteLength: " + str(len(streamer.remainder()))
 
+        image = Image.new("RGB", (width, height), "white")
+        imgdraw = ImageDraw.Draw(image)
+
         for i in range(height):
             tiles.append([])
 
@@ -40,6 +43,9 @@ class PacketAParser(object):
                 if repeat_count > 0:
                     repeat_count -= 1
                     tiles[y].append(last_tile)
+                    #color = "rgb(0,0,0)" if last_tile > 0 else "rgb(255,255,255)"
+                    color = "rgb(" + str(last_tile.type) + "," + str(last_tile.type) + "," + str(last_tile.type) + ")"
+                    imgdraw.point((x, y), fill=color)
                 else:
                     flag = streamer.next_byte()
                     flag2 = 0
@@ -56,7 +62,7 @@ class PacketAParser(object):
                     repeat_value_present = flag & 64 > 0
                     extra_repeat_value = flag & 128 > 0
 
-                    print str(int(active)) + " " + str(int(has_wall)) + " " + str(int(liquid)) + " " + str(int(is_short)) + " " + str(int(repeat_value_present)) + " " + str(int(extra_repeat_value))
+                    #print str(int(active)) + " " + str(int(has_wall)) + " " + str(int(liquid)) + " " + str(int(is_short)) + " " + str(int(repeat_value_present)) + " " + str(int(extra_repeat_value))
 
                     if not repeat_value_present and extra_repeat_value:
                         print "WTF"
@@ -106,11 +112,10 @@ class PacketAParser(object):
                     temp_tile = Tile()
                     last_tile = temp_tile
                     tiles[y].append(temp_tile)
-            # print str(len(streamer.remainder()))
-            # print "XY: " + str(x) + " : " + str(y) + " Rem: " + str(len(streamer.remainder()))
-        # print "Width: " + str(len(tiles[0]))
-        # print "Height: " + str(len(tiles))
+                    color = "rgb(" + str(last_tile.type) + "," + str(last_tile.type) + "," + str(last_tile.type) + ")"
+                    imgdraw.point((x, y), fill=color)
         print "-------------------------"
+        image.show()
 
 
 # Temporary class, will be moved to own file later on
