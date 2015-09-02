@@ -10,4 +10,4 @@ class Packet7Parser(object):
 		world.maxY = struct.unpack("<h", data[9:11])[0]
 		world.spawnX = struct.unpack("<h", data[11:13])[0]
 		world.spawnY = struct.unpack("<h", data[13:15])[0]
-
+		print str(world.maxX) + " " + str(world.maxY)

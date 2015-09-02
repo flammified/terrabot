@@ -44,8 +44,6 @@ class PacketAParser(object):
                     repeat_count -= 1
                     tiles[y].append(last_tile)
                     #color = "rgb(0,0,0)" if last_tile > 0 else "rgb(255,255,255)"
-                    color = "rgb(" + str(last_tile.type) + "," + str(last_tile.type) + "," + str(last_tile.type) + ")"
-                    imgdraw.point((x, y), fill=color)
                 else:
                     flag = streamer.next_byte()
                     flag2 = 0
@@ -109,11 +107,11 @@ class PacketAParser(object):
                         if repeat_value_present:
                             repeat_count = streamer.next_byte()
                     # print str(frame_x) + " " + str(frame_y) + " " + str(wall) + " " + str(wall_color) + " " + str(tile_type) + " " + str(color) + " " + str(repeat_count)
-                    temp_tile = Tile()
+                    temp_tile = Tile(active, tile_type, color)
                     last_tile = temp_tile
                     tiles[y].append(temp_tile)
-                    color = "rgb(" + str(last_tile.type) + "," + str(last_tile.type) + "," + str(last_tile.type) + ")"
-                    imgdraw.point((x, y), fill=color)
+                color = "rgb(" + str((last_tile.type & 7) << 5) + "," + str((last_tile.type & (7 << 3)) << 2) + "," + str((last_tile.type & (7 << 6)) >> 1) + ")"
+                imgdraw.point((x, y), fill=color)
         print "-------------------------"
         image.show()
 
