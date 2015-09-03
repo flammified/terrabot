@@ -4,7 +4,7 @@ import threading
 import packets
 
 from player import Player
-from world import World
+from terrabot.data.world import World
 
 
 class TerraBot(object):

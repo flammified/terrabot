@@ -13,4 +13,5 @@ class Packet7Parser(object):
 		world.maxY = streamer.next_short()
 		world.spawnX = streamer.next_short()
 		world.spawnY = streamer.next_short()
+		world.tiles = [[0 for x in range(0, world.maxX) for y in range(0, world.maxY)]]
 		print str(world.maxX) + " " + str(world.maxY)

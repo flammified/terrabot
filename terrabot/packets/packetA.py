@@ -1,5 +1,7 @@
 from PIL import Image, ImageDraw
 import zlib
+
+from terrabot.data.tile import Tile
 from terrabot.util.tileutil import *
 from terrabot.util.streamer import Streamer
 
@@ -113,12 +115,3 @@ class PacketAParser(object):
                 color = "rgb(" + str((last_tile.type & 7) << 5) + "," + str((last_tile.type & (7 << 3)) << 2) + "," + str((last_tile.type & (7 << 6)) >> 1) + ")"
                 imgdraw.point((x, y), fill=color)
         print "-------------------------"
-        image.show()
-
-
-# Temporary class, will be moved to own file later on
-class Tile(object):
-    def __init__(self, active=True, tile_type=0, color=(0, 0, 0)):
-        self.active = active
-        self.type = tile_type
-        self.color = color
