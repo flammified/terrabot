@@ -3,7 +3,7 @@ import struct
 import threading
 import packets
 
-from player import Player
+from terrabot.data.player import Player
 from terrabot.data.world import World
 
 
