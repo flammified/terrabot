@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     HOST = '127.0.0.1'
     PORT = 7777
-    PROTOCOL = 155
+    PROTOCOL = 156
     PLAYERNAME = 'Terrabot'
 
     if len(sys.argv) > 1:
