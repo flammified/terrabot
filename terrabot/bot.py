@@ -5,6 +5,7 @@ import packets
 
 from terrabot.data.player import Player
 from terrabot.data.world import World
+from terrabot.util.worlddrawer import draw_world
 
 
 class TerraBot(object):
@@ -71,6 +72,9 @@ class TerraBot(object):
             except AttributeError as e:
                 print str(e)
 
+            if ord(packno) == 11:
+                draw_world(self.world)
+
             if ord(packno) == 2:
                 self.stop()
                 continue
@@ -90,9 +94,9 @@ class TerraBot(object):
 
             if ord(packno) == 7 and self.initialized and not self.flag:
                 self.add_packet(packets.PacketC(self.player, self.world))
-                self.flag = True
                 self.add_packet(packets.Packet19(self.player))
-                self.add_packet(packets.Packet1E(self.player))
+                self.flag = True
+
 
     def write_packets(self):
         while self.running:

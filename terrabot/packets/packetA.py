@@ -1,4 +1,3 @@
-from PIL import Image, ImageDraw
 import zlib
 
 from terrabot.data.tile import Tile
@@ -10,7 +9,6 @@ class PacketAParser(object):
     def parse(self, world, player, data):
         streamer = Streamer(data)
         streamer.next_byte()  # Skip packet number byte
-        tiles = []
         compressed = streamer.next_byte()
 
         print "Compressed: " + str(compressed)
@@ -31,12 +29,6 @@ class PacketAParser(object):
         print "Height: " + str(height)
         #print "ByteLength: " + str(len(streamer.remainder()))
 
-        image = Image.new("RGB", (width, height), "white")
-        imgdraw = ImageDraw.Draw(image)
-
-        for i in range(height):
-            tiles.append([])
-
         repeat_count = 0
         last_tile = None
 
@@ -44,7 +36,7 @@ class PacketAParser(object):
             for x in range(width):
                 if repeat_count > 0:
                     repeat_count -= 1
-                    tiles[y].append(last_tile)
+                    world.tiles[starty + y][startx + x] = last_tile
                     #color = "rgb(0,0,0)" if last_tile > 0 else "rgb(255,255,255)"
                 else:
                     flag = streamer.next_byte()
@@ -109,9 +101,8 @@ class PacketAParser(object):
                         if repeat_value_present:
                             repeat_count = streamer.next_byte()
                     # print str(frame_x) + " " + str(frame_y) + " " + str(wall) + " " + str(wall_color) + " " + str(tile_type) + " " + str(color) + " " + str(repeat_count)
-                    temp_tile = Tile(active, tile_type, color)
+
+                    temp_tile = Tile(tile_type=tile_type, active=active, color=color)
                     last_tile = temp_tile
-                    tiles[y].append(temp_tile)
-                color = "rgb(" + str((last_tile.type & 7) << 5) + "," + str((last_tile.type & (7 << 3)) << 2) + "," + str((last_tile.type & (7 << 6)) >> 1) + ")"
-                imgdraw.point((x, y), fill=color)
+                    world.tiles[starty + y][startx + x] = temp_tile
         print "-------------------------"
