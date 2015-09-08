@@ -24,7 +24,7 @@ class Streamer(object):
         return result
 
     def next_byte(self):
-        result = ord(self.data[self.index])
+        result = self.data[self.index]
         self.index += 1
         return result
 

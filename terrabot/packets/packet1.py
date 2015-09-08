@@ -1,4 +1,4 @@
-import packet
+from . import packet
 
 
 class Packet1(packet.Packet):

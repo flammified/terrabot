@@ -1,4 +1,4 @@
-import packet
+from . import packet
 
 
 #Does not work?

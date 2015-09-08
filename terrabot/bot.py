@@ -1,7 +1,7 @@
 import socket
 import struct
 import threading
-import packets
+from . import packets
 
 from terrabot.data.player import Player
 from terrabot.data.world import World
@@ -54,7 +54,7 @@ class TerraBot(object):
         while self.running:
             packet_length = self.client.recv(2)
             if len(packet_length) < 2:
-                print ord(packet_length)
+                print(ord(packet_length))
                 self.stop()
                 continue
             packet_length = struct.unpack("<h", packet_length)[0] - 2
@@ -63,23 +63,23 @@ class TerraBot(object):
 
             data = self.client.recv(packet_length)
             packno = data[0]
+            print(packno)
 
             # print format(ord(packno), "x")
             try:
-                parser = "Packet" + format(ord(packno), 'x').upper() + "Parser"
+                parser = "Packet" + format(packno, 'x').upper() + "Parser"
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data)
             except AttributeError as e:
-                print str(e)
-
-            if ord(packno) == 11:
+                print((str(e)))
+            if packno == 11:
                 draw_world(self.world)
 
-            if ord(packno) == 2:
+            if packno == 2:
                 self.stop()
                 continue
 
-            if ord(packno) == 3:
+            if packno == 3:
                 self.add_packet(packets.Packet4(self.player))
                 self.add_packet(packets.Packet10(self.player))
                 self.add_packet(packets.Packet2A(self.player))
@@ -88,11 +88,11 @@ class TerraBot(object):
                     self.add_packet(packets.Packet5(self.player, i))
                 self.add_packet(packets.Packet6())
 
-            if ord(packno) == 7 and not self.initialized:
+            if packno == 7 and not self.initialized:
                 self.add_packet(packets.Packet8(self.player, self.world))
                 self.initialized = True
 
-            if ord(packno) == 7 and self.initialized and not self.flag:
+            if packno == 7 and self.initialized and not self.flag:
                 self.add_packet(packets.PacketC(self.player, self.world))
                 self.add_packet(packets.Packet19(self.player))
                 self.flag = True

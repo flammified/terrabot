@@ -1,1 +1,1 @@
-from bot import TerraBot
+from .bot import TerraBot

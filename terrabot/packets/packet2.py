@@ -1,4 +1,4 @@
 class Packet2Parser(object):
 
     def parse(self, world, player, data):
-        print str(data[2:])
+        print(str(data[2:]))

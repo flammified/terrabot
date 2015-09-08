@@ -11,7 +11,7 @@ class PacketAParser(object):
         streamer.next_byte()  # Skip packet number byte
         compressed = streamer.next_byte()
 
-        print "Compressed: " + str(compressed)
+        print("Compressed: " + str(compressed))
 
         if compressed:
             compressed_data = streamer.remainder()
@@ -23,10 +23,10 @@ class PacketAParser(object):
         width = streamer.next_short()
         height = streamer.next_short()
 
-        print "StartX: " + str(startx)
-        print "StartY: " + str(starty)
-        print "Width: " + str(width)
-        print "Height: " + str(height)
+        print("StartX: " + str(startx))
+        print("StartY: " + str(starty))
+        print("Width: " + str(width))
+        print("Height: " + str(height))
         #print "ByteLength: " + str(len(streamer.remainder()))
 
         repeat_count = 0
@@ -57,7 +57,7 @@ class PacketAParser(object):
                     #print str(int(active)) + " " + str(int(has_wall)) + " " + str(int(liquid)) + " " + str(int(is_short)) + " " + str(int(repeat_value_present)) + " " + str(int(extra_repeat_value))
 
                     if not repeat_value_present and extra_repeat_value:
-                        print "WTF"
+                        print("WTF")
 
                     wire = flag2 & 2 > 0
                     wire2 = flag2 & 4 > 0
@@ -105,4 +105,4 @@ class PacketAParser(object):
                     temp_tile = Tile(tile_type=tile_type, active=active, color=color)
                     last_tile = temp_tile
                     world.tiles[starty + y][startx + x] = temp_tile
-        print "-------------------------"
+        print("-------------------------")
