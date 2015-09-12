@@ -22,7 +22,6 @@ class Packet(object):
         if pascal_string:
             length = len(d)
             d = bytes(d, 'utf-8')
-            print(type(struct.pack('<b', length)))
             self.data += struct.pack('<b', length)
             self.data += d
         else:

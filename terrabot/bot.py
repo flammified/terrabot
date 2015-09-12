@@ -54,26 +54,22 @@ class TerraBot(object):
         while self.running:
             packet_length = self.client.recv(2)
             if len(packet_length) < 2:
-                print(ord(packet_length))
                 self.stop()
                 continue
             packet_length = struct.unpack("<h", packet_length)[0] - 2
 
-            # print "Length: " + str(packet_length-2)
-
             data = self.client.recv(packet_length)
             packno = data[0]
-            print(packno)
-
-            # print format(ord(packno), "x")
             try:
                 parser = "Packet" + format(packno, 'x').upper() + "Parser"
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data)
             except AttributeError as e:
-                print((str(e)))
+                pass
+
             if packno == 11:
-                draw_world(self.world)
+                pass
+                # draw_world(self.world)
 
             if packno == 2:
                 self.stop()
