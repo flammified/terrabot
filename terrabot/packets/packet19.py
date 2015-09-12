@@ -1,12 +1,18 @@
 from . import packet
-
+from terrabot.util.streamer import Streamer
 
 class Packet19Parser(object):
 
     def parse(self, world, player, data):
-        if data[1] != player.playerID:
-            print(data[6:])
-
+        streamer = Streamer(data)
+        streamer.next_byte() # Skip packet id
+        id = streamer.next_byte()
+        if id != player.playerID:
+            color = (streamer.next_byte(),
+                    streamer.next_byte(),
+                    streamer.next_byte())
+            length = streamer.next_byte()
+            print(streamer.remainder())
 
 class Packet19(packet.Packet):
 
