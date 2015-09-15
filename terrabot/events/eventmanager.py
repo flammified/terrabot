@@ -22,7 +22,7 @@ class EventManager(object):
             return f
         return add_wrapper
 
-    def add_listener(self, event_id, listener):
+    def method_on_event(self, event_id, listener):
         if not event_id in self.event_methods:
             self.event_methods[event_id] = []
         self.event_methods[event_id].append(listener)
