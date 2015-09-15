@@ -6,7 +6,7 @@ from terrabot.util.streamer import Streamer
 
 
 class PacketAParser(object):
-    def parse(self, world, player, data):
+    def parse(self, world, player, data, ev_man):
         streamer = Streamer(data)
         streamer.next_byte()  # Skip packet number byte
         compressed = streamer.next_byte()

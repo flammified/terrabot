@@ -1,5 +1,7 @@
+from terrabot.events import Events
+
 class Packet3Parser(object):
 
-    def parse(self, world, player, data):
+    def parse(self, world, player, data, ev_man):
         player.playerID = ord(data[1:])
-        print("PlayerID: " + str(player.playerID))
+        ev_man.raise_event(Events.PlayerID, player.playerID)

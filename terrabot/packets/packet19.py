@@ -1,18 +1,19 @@
 from . import packet
 from terrabot.util.streamer import Streamer
+from terrabot.events.events import Events
 
 class Packet19Parser(object):
 
-    def parse(self, world, player, data):
+    def parse(self, world, player, data, ev_man):
         streamer = Streamer(data)
         streamer.next_byte() # Skip packet id
         id = streamer.next_byte()
-        if id != player.playerID:
-            color = (streamer.next_byte(),
-                    streamer.next_byte(),
-                    streamer.next_byte())
-            length = streamer.next_byte()
-            print(streamer.remainder())
+        color = (streamer.next_byte(),
+                streamer.next_byte(),
+                streamer.next_byte())
+        length = streamer.next_byte()
+        msg = streamer.remainder()
+        ev_man.raise_event(Events.Chat, msg)
 
 class Packet19(packet.Packet):
 

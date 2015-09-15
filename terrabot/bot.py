@@ -6,6 +6,7 @@ from . import packets
 from terrabot.data.player import Player
 from terrabot.data.world import World
 from terrabot.util.worlddrawer import draw_world
+from . import events
 
 
 class TerraBot(object):
@@ -22,8 +23,6 @@ class TerraBot(object):
         self.protocol = protocol
         self.running = False
 
-        self.name = name
-
         self.writeThread = threading.Thread(target=self.read_packets)
         self.writeThread.daemon = True
 
@@ -36,7 +35,9 @@ class TerraBot(object):
         self.writeQueue = []
 
         self.world = World()
-        self.player = Player(self.name)
+        self.player = Player(name)
+
+        self.event_manager = events.EventManager()
 
         self.flag = False
 
@@ -63,7 +64,7 @@ class TerraBot(object):
             try:
                 parser = "Packet" + format(packno, 'x').upper() + "Parser"
                 packet_class = getattr(packets, parser)
-                packet_class().parse(self.world, self.player, data)
+                packet_class().parse(self.world, self.player, data, self.event_manager)
             except AttributeError as e:
                 pass
 
@@ -92,7 +93,6 @@ class TerraBot(object):
                 self.add_packet(packets.PacketC(self.player, self.world))
                 self.add_packet(packets.Packet19(self.player))
                 self.flag = True
-
 
     def write_packets(self):
         while self.running:

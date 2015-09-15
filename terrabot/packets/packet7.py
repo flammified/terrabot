@@ -3,7 +3,7 @@ from terrabot.util.streamer import Streamer
 
 class Packet7Parser(object):
 
-	def parse(self, world, player, data):
+	def parse(self, world, player, data, ev_man):
 		streamer = Streamer(data)
 		streamer.next_byte() # Ignore packet ID byte
 		world.time = streamer.next_int32()
