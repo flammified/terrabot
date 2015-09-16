@@ -30,16 +30,12 @@ class TerraBot(object):
         self.readThread.daemon = True
 
         self.client = None
-        self.initialized = False
-
         self.writeQueue = []
 
         self.world = World()
         self.player = Player(name)
-
         self.event_manager = events.EventManager()
 
-        self.flag = False
 
     """Connects to the server and starts the main loop"""
     def start(self):
@@ -85,14 +81,13 @@ class TerraBot(object):
                     self.add_packet(packets.Packet5(self.player, i))
                 self.add_packet(packets.Packet6())
 
-            if packno == 7 and not self.initialized:
+            if packno == 7 and not self.player.initialized:
                 self.add_packet(packets.Packet8(self.player, self.world))
-                self.initialized = True
+                self.player.initialized = True
 
-            if packno == 7 and self.initialized and not self.flag:
+            if packno == 7 and self.player.initialized and not self.player.logged_in:
                 self.add_packet(packets.PacketC(self.player, self.world))
                 self.add_packet(packets.Packet19(self.player))
-                self.flag = True
 
     def write_packets(self):
         while self.running:
