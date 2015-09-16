@@ -36,6 +36,8 @@ class TerraBot(object):
         self.player = Player(name)
         self.event_manager = events.EventManager()
 
+        self.event_manager.method_on_event(events.Events.PlayerID, self,  self.received_player_id)
+
 
     """Connects to the server and starts the main loop"""
     def start(self):
@@ -88,6 +90,9 @@ class TerraBot(object):
             if packno == 7 and self.player.initialized and not self.player.logged_in:
                 self.add_packet(packets.PacketC(self.player, self.world))
                 self.add_packet(packets.Packet19(self.player))
+
+    def received_player_id(self, event_id, data):
+        pass
 
     def write_packets(self):
         while self.running:
