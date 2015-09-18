@@ -6,3 +6,4 @@ class Events(enum.Enum):
     Login = 2
     PlayerID = 3
     Blocked = 4
+    Initialized = 5

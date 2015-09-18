@@ -1,3 +1,4 @@
+
 import struct
 from terrabot.util.streamer import Streamer
 from terrabot.events.events import Events
@@ -16,8 +17,10 @@ class Packet7Parser(object):
         world.spawnY = streamer.next_short()
         world.initialize_tiles(world.maxX, world.maxY)
 
+        if not player.initialized:
+            player.initialized = True
+            ev_man.raise_event(Events.Initialized, None)
+
         if player.initialized and not player.logged_in:
             player.logged_in = True
             ev_man.raise_event(Events.Login, None)
-
-            # Temporary fix until I move the login process to eventhandlers

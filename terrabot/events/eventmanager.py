@@ -22,15 +22,16 @@ class EventManager(object):
             return f
         return add_wrapper
 
-    def method_on_event(self, event_id, obj, listener):
+    def method_on_event(self, event_id, listener):
         if not event_id in self.event_methods:
             self.event_methods[event_id] = []
-        self.event_methods[event_id].append((obj, listener))
+        self.event_methods[event_id].append(listener)
 
     def raise_event(self, event_id, data):
+        # print("Event happened: ", event_id)
         if event_id in self.event_listeners:
             for f in self.event_listeners[event_id]:
                 f(event_id, data)
         if event_id in self.event_methods:
-            for obj, f in self.event_methods[event_id]:
-                obj.f(event_id, data)
+            for f in self.event_methods[event_id]:
+                f(event_id, data)

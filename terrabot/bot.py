@@ -13,7 +13,7 @@ class TerraBot(object):
     """A bot for a terraria server"""
 
     # Defaults to 7777, because that is the default port for the server
-    def __init__(self, ip, port=7777, protocol=155, name="Terrabot"):
+    def __init__(self, ip, port=7777, protocol=156, name="Terrabot"):
         super(TerraBot, self).__init__()
 
         self.HOST = ip
@@ -34,9 +34,12 @@ class TerraBot(object):
 
         self.world = World()
         self.player = Player(name)
-        self.event_manager = events.EventManager()
+        self._evman = events.EventManager()
 
-        self.event_manager.method_on_event(events.Events.PlayerID, self,  self.received_player_id)
+        self._evman.method_on_event(events.Events.PlayerID, self.received_player_id)
+        self._evman.method_on_event(events.Events.Initialized, self.initialized)
+        self._evman.method_on_event(events.Events.Login, self.logged_in)
+        # self.event_manager.method_on_event(events.Events.)
 
 
     """Connects to the server and starts the main loop"""
@@ -59,40 +62,33 @@ class TerraBot(object):
 
             data = self.client.recv(packet_length)
             packno = data[0]
+
             try:
                 parser = "Packet" + format(packno, 'x').upper() + "Parser"
                 packet_class = getattr(packets, parser)
-                packet_class().parse(self.world, self.player, data, self.event_manager)
+                packet_class().parse(self.world, self.player, data, self._evman)
             except AttributeError as e:
                 pass
-
-            if packno == 11:
-                pass
-                # draw_world(self.world)
 
             if packno == 2:
                 self.stop()
                 continue
 
-            if packno == 3:
-                self.add_packet(packets.Packet4(self.player))
-                self.add_packet(packets.Packet10(self.player))
-                self.add_packet(packets.Packet2A(self.player))
-                self.add_packet(packets.Packet32(self.player))
-                for i in range(0, 83):
-                    self.add_packet(packets.Packet5(self.player, i))
-                self.add_packet(packets.Packet6())
-
-            if packno == 7 and not self.player.initialized:
-                self.add_packet(packets.Packet8(self.player, self.world))
-                self.player.initialized = True
-
-            if packno == 7 and self.player.initialized and not self.player.logged_in:
-                self.add_packet(packets.PacketC(self.player, self.world))
-                self.add_packet(packets.Packet19(self.player))
-
     def received_player_id(self, event_id, data):
-        pass
+        self.add_packet(packets.Packet4(self.player))
+        self.add_packet(packets.Packet10(self.player))
+        self.add_packet(packets.Packet2A(self.player))
+        self.add_packet(packets.Packet32(self.player))
+        for i in range(0, 83):
+            self.add_packet(packets.Packet5(self.player, i))
+        self.add_packet(packets.Packet6())
+
+    def initialized(self, event, data):
+        self.add_packet(packets.Packet8(self.player, self.world))
+
+    def logged_in(self, event, data):
+        self.add_packet(packets.PacketC(self.player, self.world))
+        self.add_packet(packets.Packet19(self.player))
 
     def write_packets(self):
         while self.running:
@@ -102,6 +98,13 @@ class TerraBot(object):
 
     def message(self, msg):
         self.add_packet(packets.Packet19(self.player, msg))
+
+    """Returns the event manager of this bot
+       A function is used, so I can change the name internally without
+       affecting bots
+       """
+    def get_event_manager(self):
+        return self._evman
 
     def print_hex_array(self, data):
         str = ""
