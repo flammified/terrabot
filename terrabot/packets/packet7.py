@@ -15,7 +15,6 @@ class Packet7Parser(object):
         world.maxY = streamer.next_short()
         world.spawnX = streamer.next_short()
         world.spawnY = streamer.next_short()
-        world.initialize_tiles(world.maxX, world.maxY)
 
         if player.initialized and not player.logged_in:
             player.logged_in = True
@@ -23,4 +22,5 @@ class Packet7Parser(object):
 
         if not player.initialized:
             player.initialized = True
+            world.initialize_tiles(world.maxX, world.maxY)
             ev_man.raise_event(Events.Initialized, None)
