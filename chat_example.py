@@ -6,7 +6,6 @@ event = bot.get_event_manager()
 
 @event.on_event(Events.Chat)
 def chat(event_id, msg):
-    msg = str(msg, "utf-8")
     print(msg)
     if "stop" in msg:
         bot.stop()

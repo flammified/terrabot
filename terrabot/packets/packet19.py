@@ -12,7 +12,7 @@ class Packet19Parser(object):
                 streamer.next_byte(),
                 streamer.next_byte())
         length = streamer.next_byte()
-        msg = streamer.remainder()
+        msg = str(streamer.remainder(), "utf-8")
         ev_man.raise_event(Events.Chat, msg)
 
 class Packet19(packet.Packet):
