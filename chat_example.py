@@ -1,8 +1,6 @@
 from terrabot import TerraBot
 from terrabot.events import Events
 
-import threading
-
 bot = TerraBot('127.0.0.1')
 event = bot.get_event_manager()
 
