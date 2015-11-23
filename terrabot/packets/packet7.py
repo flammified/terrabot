@@ -17,10 +17,10 @@ class Packet7Parser(object):
         world.spawnY = streamer.next_short()
         world.initialize_tiles(world.maxX, world.maxY)
 
-        if not player.initialized:
-            player.initialized = True
-            ev_man.raise_event(Events.Initialized, None)
-
         if player.initialized and not player.logged_in:
             player.logged_in = True
             ev_man.raise_event(Events.Login, None)
+
+        if not player.initialized:
+            player.initialized = True
+            ev_man.raise_event(Events.Initialized, None)
