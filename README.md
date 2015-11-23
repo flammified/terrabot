@@ -1,18 +1,56 @@
-#Introduction
-Terrabot is a Terraria bot written in python. I am aiming to make it a library that can be used to easily create custom Terraria bots by separating Behaviour from the client itself.
+Terrabot
+=====
 
-#Features at the moment
+Introduction
+-----
+Terrabot is a Terraria bot API written in Python.
+It is designed to be easy to use and uses the event-listener pattern.
 
- - It connects to TShock servers
- - Parses packets like chat and player notifications
- - Chats
+Current features
+------
 
-#Missing features
+ - Connecting to servers
+ - Sending chat messages
+ - Parsing world data
+ - Drawing the world to an image
+ - Responding to various events
 
- - Connecting to official servers. (It still crashes)
- - Parsing packets like world data
- - An easily used API
+Missing features
+-------
+
+ - Movement
+ - The implementation of a lot of packets
 
 
+Examples
+-------
 
+The following is a very basic bot, which will connect and handle chat.
 
+-----
+```python
+from terrabot import TerraBot
+from terrabot.events import Events
+
+#Create a TerraBot object
+bot = TerraBot('127.0.0.1')
+event = bot.get_event_manager()
+
+#Connect a function to an event using a decorator
+@event.on_event(Events.Chat)
+def chat(event_id, msg):
+    #Do something with the message
+    #In this case, stop the bot if the word "Stop" occurs
+    print(msg)
+    if "stop" in msg:
+        bot.stop()
+
+#Start the bot
+bot.start()
+
+#And wait
+while bot.running:
+pass
+```
+
+The TerraBot runs in a separate daemon thread. This means that when the main thread is gone, the bot will automatically stop. This is why the example waits for bot.running to become False.
