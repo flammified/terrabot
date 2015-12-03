@@ -41,7 +41,6 @@ class TerraBot(object):
         self._evman.method_on_event(events.Events.Login, self.logged_in)
         # self.event_manager.method_on_event(events.Events.)
 
-
     """Connects to the server and starts the main loop"""
     def start(self):
         if not self.writeThread.isAlive() and not self.readThread.isAlive():
