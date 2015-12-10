@@ -11,7 +11,7 @@ It is designed to be easy to use and uses the event-listener pattern.
 Installation
 ------
 
-Install the python using pip:
+Install the module using pip:
 
 ```
 pip3 install terrabot
