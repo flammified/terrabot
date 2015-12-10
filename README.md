@@ -3,8 +3,19 @@ Terrabot
 
 Introduction
 -----
+[![PyPI version](https://badge.fury.io/py/terrabot.svg)](https://badge.fury.io/py/terrabot)
+
 Terrabot is a Terraria bot API written in Python.
 It is designed to be easy to use and uses the event-listener pattern.
+
+Installation
+------
+
+Install the python using pip:
+
+```
+pip3 install terrabot
+```
 
 Current features
 ------
