@@ -7,3 +7,4 @@ class Events(enum.Enum):
     PlayerID = 3
     Blocked = 4
     Initialized = 5
+    ItemDropped = 6
