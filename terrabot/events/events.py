@@ -8,3 +8,4 @@ class Events(enum.Enum):
     Blocked = 4
     Initialized = 5
     ItemOwnerChanged = 6
+    ItemDropUpdate = 7
