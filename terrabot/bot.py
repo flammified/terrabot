@@ -6,7 +6,7 @@ from . import packets
 from terrabot.data.player import Player
 from terrabot.data.world import World
 from terrabot.util.worlddrawer import draw_world
-from . import events
+from .events import Events, EventManager
 
 
 class TerraBot(object):
@@ -34,12 +34,12 @@ class TerraBot(object):
 
         self.world = World()
         self.player = Player(name)
-        self._evman = events.EventManager()
+        self._evman = EventManager()
 
-        self._evman.method_on_event(events.Events.PlayerID, self.received_player_id)
-        self._evman.method_on_event(events.Events.Initialized, self.initialized)
-        self._evman.method_on_event(events.Events.Login, self.logged_in)
-        self._evman.method_on_event(events.Events.ItemDropped, self.item_dropped)
+        self._evman.method_on_event(Events.PlayerID, self.received_player_id)
+        self._evman.method_on_event(Events.Initialized, self.initialized)
+        self._evman.method_on_event(Events.Login, self.logged_in)
+        self._evman.method_on_event(Events.ItemOwnerChanged, self.item_owner_changed)
         # self.event_manager.method_on_event(events.Events.)
 
 
@@ -92,7 +92,7 @@ class TerraBot(object):
         self.add_packet(packets.PacketC(self.player, self.world))
         self.add_packet(packets.Packet19(self.player))
 
-    def item_dropped(self, event, data):
+    def item_owner_changed(self, event, data):
         pass
 
     def write_packets(self):
