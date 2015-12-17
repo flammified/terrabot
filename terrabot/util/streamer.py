@@ -28,5 +28,10 @@ class Streamer(object):
         self.index += 1
         return result
 
+    def next_float(self):
+        result = struct.unpack("<f", self.data[self.index: self.index + 4])[0]
+        self.index += 4
+        return result
+
     def remainder(self):
         return self.data[self.index:]
