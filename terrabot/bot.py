@@ -39,7 +39,7 @@ class TerraBot(object):
         self._evman.method_on_event(Events.PlayerID, self.received_player_id)
         self._evman.method_on_event(Events.Initialized, self.initialized)
         self._evman.method_on_event(Events.Login, self.logged_in)
-        #self._evman.method_on_event(Events.ItemOwnerChanged, self.item_owner_changed)
+        self._evman.method_on_event(Events.ItemOwnerChanged, self.item_owner_changed)
         # self.event_manager.method_on_event(events.Events.)
 
 
@@ -70,11 +70,14 @@ class TerraBot(object):
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data, self._evman)
             except AttributeError as e:
-                pass
+                print(e)
 
             if packno == 2:
                 self.stop()
                 continue
+
+    def item_owner_changed(self, id, data):
+        self.add_packet(packets.Packet16(data[0], data[1]))
 
     def received_player_id(self, event_id, data):
         self.add_packet(packets.Packet4(self.player))
