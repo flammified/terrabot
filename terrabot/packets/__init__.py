@@ -25,6 +25,5 @@ from .packet31	import *
 from .packet39	import *
 from .packet1E	import *
 from .packet3D	import *
-
-
-
+from .packet52	import *
+from .packet53	import *
