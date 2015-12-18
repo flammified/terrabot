@@ -9,3 +9,4 @@ class Events(enum.Enum):
     Initialized = 5
     ItemOwnerChanged = 6
     ItemDropUpdate = 7
+    NewPlayer = 8

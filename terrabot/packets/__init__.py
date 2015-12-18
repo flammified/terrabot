@@ -16,6 +16,7 @@ from .packetA	import *
 from .packetB	import *
 from .packetC	import *
 from .packetD	import *
+from .packetE   import *
 from .packet15	import *
 from .packet16	import *
 from .packet17	import *
