@@ -15,11 +15,8 @@ class Packet15Parser(object):
 		no_delay = streamer.next_byte()
 		net_id = streamer.next_short()
 
-		if item_id < 400 and net_id == 0:
-			return
-		if item_id is 400:
-			world.items.append(item)
-
 		item_object = Item(item_id, net_id, position, velocity, prefix, stacks)
+
+		world.items.items[item_id] = item_object
 
 		ev_man.raise_event(Events.ItemDropUpdate, item_object)

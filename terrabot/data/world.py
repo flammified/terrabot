@@ -8,7 +8,7 @@ class World:
         self.spawnX = 0
         self.spawnY = 0
         self.time = 0
-        self.items = [] #Intended to be a list of Item namedtuples
+        self.items = {} #Intended to be a dictionary of Item objects
 
     def initialize_tiles(self, width, height):
         self.tiles =  [[None for x in range(0, width)]
