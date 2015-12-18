@@ -17,6 +17,8 @@ class Packet15Parser(object):
 
 		item_object = Item(item_id, net_id, position, velocity, prefix, stacks)
 
-		world.items[item_id] = item_object
-
-		ev_man.raise_event(Events.ItemDropUpdate, item_object)
+		if item_id in world.items:
+			ev_man.raise_event(Events.ItemDropUpdate, item_object)
+		else:
+			world.items[item_id] = item_object
+			ev_man.raise_event(Events.ItemDropped, item_object)

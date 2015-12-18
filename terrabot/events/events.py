@@ -8,5 +8,6 @@ class Events(enum.Enum):
     Blocked = 4
     Initialized = 5
     ItemOwnerChanged = 6
-    ItemDropUpdate = 7
-    NewPlayer = 8
+    ItemDropped = 7
+    ItemDropUpdate = 8
+    NewPlayer = 9
