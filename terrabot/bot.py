@@ -96,6 +96,9 @@ class TerraBot(object):
                 self.writeQueue[0].send(self.client)
                 self.writeQueue.pop(0)
 
+    def teleport(x, y):
+        self.add_packet(packets.Packet41(self.id, x, y))
+
     def message(self, msg):
         self.add_packet(packets.Packet19(self.player, msg))
 

@@ -18,12 +18,14 @@ class Player(object):
         self.difficulty = 0
         self.name = name
 
-
         self.maxHP = 400
-        self.currHP = 300
+        self.currHP = 400
 
         self.maxMana = 50
         self.currMana = 10
 
         self.initialized = False
         self.logged_in = False
+
+        self.x = -1
+        self.y = -1
