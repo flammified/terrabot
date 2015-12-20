@@ -76,7 +76,8 @@ class TerraBot(object):
                 continue
 
     def item_owner_changed(self, id, data):
-        self.add_packet(packets.Packet16(data[0], data[1]))
+        if self.player.logged_in:
+            self.add_packet(packets.Packet16(data[0], data[1]))
 
     def received_player_id(self, event_id, data):
         self.add_packet(packets.Packet4(self.player))
@@ -102,7 +103,9 @@ class TerraBot(object):
                 self.writeQueue.pop(0)
 
     def message(self, msg):
-        self.add_packet(packets.Packet19(self.player, msg))
+        if self.player.logged_in:
+            self.add_packet(packets.Packet19(self.player, msg))
+        
 
     """Returns the event manager of this bot
        A function is used, so I can change the name internally without
@@ -110,12 +113,6 @@ class TerraBot(object):
        """
     def get_event_manager(self):
         return self._evman
-
-    def print_hex_array(self, data):
-        str = ""
-        for i in data:
-            str += format(ord(i), "x")
-        return str
 
     def add_packet(self, packet):
         self.writeQueue.append(packet)
