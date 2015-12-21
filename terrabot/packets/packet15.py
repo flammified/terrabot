@@ -21,4 +21,6 @@ class Packet15Parser(object):
 			ev_man.raise_event(Events.ItemDropUpdate, item_object)
 		else:
 			world.items[item_id] = item_object
+			if not world.item_owner_index[item_id]:
+				world.item_owner_index[item_id] = 255
 			ev_man.raise_event(Events.ItemDropped, item_object)

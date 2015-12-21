@@ -16,5 +16,5 @@ class Packet16Parser(object):
 		streamer.next_byte() # Ignore packet number
 		item_id = streamer.next_short()
 		owner_id = streamer.next_byte()
-
+		world.item_owner_index[item_id] = owner_id
 		ev_man.raise_event(Events.ItemOwnerChanged, (item_id, owner_id))
