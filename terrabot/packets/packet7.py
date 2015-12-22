@@ -1,5 +1,3 @@
-
-import struct
 from terrabot.util.streamer import Streamer
 from terrabot.events.events import Events
 
