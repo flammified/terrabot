@@ -6,7 +6,7 @@ from . import packets
 from terrabot.data.player import Player
 from terrabot.data.world import World
 from terrabot.util.worlddrawer import draw_world
-from . import events
+from .events import Events, EventManager
 
 
 class TerraBot(object):
@@ -34,11 +34,11 @@ class TerraBot(object):
 
         self.world = World()
         self.player = Player(name)
-        self._evman = events.EventManager()
+        self._evman = EventManager()
 
-        self._evman.method_on_event(events.Events.PlayerID, self.received_player_id)
-        self._evman.method_on_event(events.Events.Initialized, self.initialized)
-        self._evman.method_on_event(events.Events.Login, self.logged_in)
+        self._evman.method_on_event(Events.PlayerID, self.received_player_id)
+        self._evman.method_on_event(Events.Initialized, self.initialized)
+        self._evman.method_on_event(Events.Login, self.logged_in)
         # self.event_manager.method_on_event(events.Events.)
 
 
@@ -51,6 +51,7 @@ class TerraBot(object):
             self.writeThread.start()
             self.readThread.start()
             self.add_packet(packets.Packet1(self.protocol))
+
 
     def read_packets(self):
         while self.running:
@@ -74,6 +75,10 @@ class TerraBot(object):
                 self.stop()
                 continue
 
+    def item_owner_changed(self, id, data):
+        if self.player.logged_in:
+            self.add_packet(packets.Packet16(data[0], data[1]))
+
     def received_player_id(self, event_id, data):
         self.add_packet(packets.Packet4(self.player))
         self.add_packet(packets.Packet10(self.player))
@@ -89,6 +94,7 @@ class TerraBot(object):
     def logged_in(self, event, data):
         self.add_packet(packets.PacketC(self.player, self.world))
         self.add_packet(packets.Packet19(self.player))
+        self._evman.method_on_event(Events.ItemOwnerChanged, self.item_owner_changed)
 
     def write_packets(self):
         while self.running:
@@ -100,7 +106,9 @@ class TerraBot(object):
         self.add_packet(packets.Packet41(self.id, x, y))
 
     def message(self, msg):
-        self.add_packet(packets.Packet19(self.player, msg))
+        if self.player.logged_in:
+            self.add_packet(packets.Packet19(self.player, msg))
+        
 
     """Returns the event manager of this bot
        A function is used, so I can change the name internally without
@@ -108,12 +116,6 @@ class TerraBot(object):
        """
     def get_event_manager(self):
         return self._evman
-
-    def print_hex_array(self, data):
-        str = ""
-        for i in data:
-            str += format(ord(i), "x")
-        return str
 
     def add_packet(self, packet):
         self.writeQueue.append(packet)

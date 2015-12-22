@@ -16,6 +16,7 @@ from .packetA	import *
 from .packetB	import *
 from .packetC	import *
 from .packetD	import *
+from .packetE   import *
 from .packet15	import *
 from .packet16	import *
 from .packet17	import *
@@ -25,6 +26,5 @@ from .packet31	import *
 from .packet39	import *
 from .packet1E	import *
 from .packet3D	import *
-
-
-
+from .packet52	import *
+from .packet53	import *

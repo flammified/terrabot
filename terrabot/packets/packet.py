@@ -5,9 +5,14 @@ class Packet(object):
 
     # Data is an array containing the payload of the packet:
     # the length does not need to be set but is calculated dynamically
-    def __init__(self, packetno):
+    def __init__(self, packetno, data=None):
         self.packetno = packetno
-        self.data = bytearray()
+
+        #Python default scope bullshit wtf
+        if data is None:
+            self.data = bytearray()
+        else:
+            self.data = data
 
     def _calculate_length(self):
         return len(self.data)
