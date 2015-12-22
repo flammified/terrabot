@@ -4,6 +4,7 @@ import threading
 
 from . import packets
 
+
 class Client(object):
     """A class that handles the connection to a Terraria Server"""
 
@@ -30,7 +31,6 @@ class Client(object):
     def add_packet(self, packet):
         """Add a packet to the queue"""
         self.write_queue.append(packet)
-
 
     def read_packets(self):
         """Read packets from the socket and parse them"""

@@ -1,6 +1,7 @@
 from .tile import Tile
 from .item import Item
 
+
 class World:
 
     def __init__(self):
