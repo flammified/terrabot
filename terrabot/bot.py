@@ -102,10 +102,13 @@ class TerraBot(object):
                 self.writeQueue[0].send(self.client)
                 self.writeQueue.pop(0)
 
-    def message(self, msg):
+    def message(self, msg, color=None):
         if self.player.logged_in:
+            if color:
+                hex_code = '%02x%02x%02x' % color
+                msg = "[c/" + hex_code + ":" + msg + "]"
             self.add_packet(packets.Packet19(self.player, msg))
-        
+
 
     """Returns the event manager of this bot
        A function is used, so I can change the name internally without
