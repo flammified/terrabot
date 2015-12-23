@@ -69,5 +69,6 @@ If you want to contribute, that's great! I would really appreciate the help. Jus
 - Item dropping
 - Teleporting other players (>:D)
 - Synchronizing packets like health and update-player-packets
+- Placing tiles (!)
 
 For information about the packets, see [this link](https://tshock.atlassian.net/wiki/display/TSHOCKPLUGINS/Packet+Documentation).
