@@ -69,7 +69,7 @@ class TerraBot(object):
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data, self._evman)
             except AttributeError as e:
-                pass
+                print(e)
 
             if packno == 2:
                 self.stop()
@@ -102,13 +102,17 @@ class TerraBot(object):
                 self.writeQueue[0].send(self.client)
                 self.writeQueue.pop(0)
 
-    def teleport(x, y):
-        self.add_packet(packets.Packet41(self.id, x, y))
+    def teleport(self, x, y):
+        self.add_packet(packets.Packet41(self.player.playerID, x, y))
+
+        #Temporary fix until I parse player update data!
+        self.player.x = x
+        self.player.y = y
 
     def message(self, msg):
         if self.player.logged_in:
             self.add_packet(packets.Packet19(self.player, msg))
-        
+
 
     """Returns the event manager of this bot
        A function is used, so I can change the name internally without
