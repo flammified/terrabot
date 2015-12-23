@@ -69,7 +69,7 @@ class TerraBot(object):
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data, self._evman)
             except AttributeError as e:
-                print(e)
+                pass #SILENCES ERRORS!
 
             if packno == 2:
                 self.stop()
@@ -109,8 +109,11 @@ class TerraBot(object):
         self.player.x = x
         self.player.y = y
 
-    def message(self, msg):
+    def message(self, msg, color=None):
         if self.player.logged_in:
+            if color:
+                hex_code = '%02x%02x%02x' % color
+                msg = "[c/" + hex_code + ":" + msg + "]"
             self.add_packet(packets.Packet19(self.player, msg))
 
 

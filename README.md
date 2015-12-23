@@ -20,17 +20,11 @@ pip3 install terrabot
 Current features
 ------
 
- - Connecting to servers
- - Sending chat messages
- - Parsing world data
- - Drawing the world to an image
- - Responding to various events
-
-Missing features
--------
-
- - Movement
- - The implementation of a lot of packets
+ - Joining servers
+ - Chatting
+ - Triggering various events, like joining, tiledata and itemdrops
+ - Parsing server data to keep classes up-to-date
+ - Moving the bot by teleporting
 
 
 Examples
@@ -64,4 +58,16 @@ while bot.running:
 pass
 ```
 
-The TerraBot runs in a separate daemon thread. This means that when the main thread is gone, the bot will automatically stop. This is why the example waits for bot.running to become False.
+More examples can be found under the 'examples' directory. Also check the wiki for more information about the inner workings of the bot and how to interface with it.
+
+Contributing
+--------
+
+If you want to contribute, that's great! I would really appreciate the help. Just send a pull request and i'll quickly check and accept it. These are some areas that need work:
+
+- NPC packet parsing
+- Item dropping
+- Teleporting other players (>:D)
+- Synchronizing packets like health and update-player-packets
+
+For information about the packets, see [this link](https://tshock.atlassian.net/wiki/display/TSHOCKPLUGINS/Packet+Documentation).
