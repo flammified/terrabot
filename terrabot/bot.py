@@ -69,7 +69,7 @@ class TerraBot(object):
                 packet_class = getattr(packets, parser)
                 packet_class().parse(self.world, self.player, data, self._evman)
             except AttributeError as e:
-                pass
+                pass #SILENCES ERRORS!
 
             if packno == 2:
                 self.stop()
