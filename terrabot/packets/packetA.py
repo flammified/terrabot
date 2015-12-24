@@ -101,7 +101,7 @@ class PacketAParser(object):
                     else:
                         if repeat_value_present:
                             repeat_count = streamer.next_byte()
-                    temp_tile = Tile(tile_type=tile_type, active=active, color=color)
+                    temp_tile = Tile(type=tile_type, active=active, color=color)
                     last_tile = temp_tile
                     world.tiles[starty + y][startx + x] = temp_tile
 

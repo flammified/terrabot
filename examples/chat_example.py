@@ -29,5 +29,5 @@ def logged_in(event_id, data):
 
 bot.start()
 
-while bot.running:
+while bot.client.running:
     pass

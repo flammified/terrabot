@@ -19,5 +19,5 @@ def drop_update(event_id, data):
 
 bot.start()
 
-while bot.running:
+while bot.client.running:
     pass
