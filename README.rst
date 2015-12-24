@@ -6,8 +6,8 @@ Introduction
 
 |PyPI version|
 
-Terrabot is a Terraria bot API written in Python. It is designed to be
-easy to use and uses the event-listener pattern.
+| Terrabot is a Terraria bot API written in Python.
+| It is designed to be easy to use and uses the event-listener pattern.
 
 Installation
 ------------
@@ -32,158 +32,39 @@ Examples
 
 The following is a very basic bot, which will connect and handle chat.
 
-+-------+
-| \`\`\ |
-| `pyth |
-| on    |
-| from  |
-| terra |
-| bot   |
-| impor |
-| t     |
-| Terra |
-| Bot   |
-| from  |
-| terra |
-| bot.e |
-| vents |
-| impor |
-| t     |
-| Event |
-| s     |
-+-------+
-| #Crea |
-| te    |
-| a     |
-| Terra |
-| Bot   |
-| objec |
-| t     |
-| bot = |
-| Terra |
-| Bot(' |
-| 127.0 |
-| .0.1' |
-| )     |
-| event |
-| =     |
-| bot.g |
-| et\_e |
-| vent\ |
-| _mana |
-| ger() |
-+-------+
-| #Conn |
-| ect   |
-| a     |
-| funct |
-| ion   |
-| to an |
-| event |
-| using |
-| a     |
-| decor |
-| ator  |
-| @even |
-| t.on\ |
-| _even |
-| t(Eve |
-| nts.C |
-| hat)  |
-| def   |
-| chat( |
-| event |
-| \_id, |
-| msg): |
-| #Do   |
-| somet |
-| hing  |
-| with  |
-| the   |
-| messa |
-| ge    |
-| #In   |
-| this  |
-| case, |
-| stop  |
-| the   |
-| bot   |
-| if    |
-| the   |
-| word  |
-| "Stop |
-| "     |
-| occur |
-| s     |
-| print |
-| (msg) |
-| if    |
-| "stop |
-| "     |
-| in    |
-| msg:  |
-| bot.s |
-| top() |
-+-------+
-| #Star |
-| t     |
-| the   |
-| bot   |
-| bot.s |
-| tart( |
-| )     |
-+-------+
-| #And  |
-| wait  |
-| while |
-| bot.r |
-| unnin |
-| g:    |
-| pass  |
-| \`\`\ |
-| `     |
-+-------+
-| More  |
-| examp |
-| les   |
-| can   |
-| be    |
-| found |
-| under |
-| the   |
-| 'exam |
-| ples' |
-| direc |
-| tory. |
-| Also  |
-| check |
-| the   |
-| wiki  |
-| for   |
-| more  |
-| infor |
-| matio |
-| n     |
-| about |
-| the   |
-| inner |
-| worki |
-| ngs   |
-| of    |
-| the   |
-| bot   |
-| and   |
-| how   |
-| to    |
-| inter |
-| face  |
-| with  |
-| it.   |
-+-------+
-| Contr |
-| ibuti |
-| ng    |
-+-------+
+--------------
+
+.. code:: python
+
+    from terrabot import TerraBot
+    from terrabot.events import Events
+
+    #Create a TerraBot object
+    bot = TerraBot('127.0.0.1')
+    event = bot.get_event_manager()
+
+    #Connect a function to an event using a decorator
+    @event.on_event(Events.Chat)
+    def chat(event_id, msg):
+        #Do something with the message
+        #In this case, stop the bot if the word "Stop" occurs
+        print(msg)
+        if "stop" in msg:
+            bot.stop()
+
+    #Start the bot
+    bot.start()
+
+    #And wait
+    while bot.running:
+    pass
+
+More examples can be found under the 'examples' directory. Also check
+the wiki for more information about the inner workings of the bot and
+how to interface with it.
+
+Contributing
+------------
 
 If you want to contribute, that's great! I would really appreciate the
 help. Just send a pull request and i'll quickly check and accept it.
