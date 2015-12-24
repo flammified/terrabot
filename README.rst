@@ -12,7 +12,7 @@ easy to use and uses the event-listener pattern.
 Installation
 ------------
 
-Install the python using pip:
+Install the module using pip:
 
 ::
 
@@ -21,53 +21,182 @@ Install the python using pip:
 Current features
 ----------------
 
--  Connecting to servers
--  Sending chat messages
--  Parsing world data
--  Drawing the world to an image
--  Responding to various events
-
-Missing features
-----------------
-
--  Movement
--  The implementation of a lot of packets
+-  Joining servers
+-  Chatting
+-  Triggering various events, like joining, tiledata and itemdrops
+-  Parsing server data to keep classes up-to-date
+-  Moving the bot by teleporting
 
 Examples
 --------
 
 The following is a very basic bot, which will connect and handle chat.
 
---------------
++-------+
+| \`\`\ |
+| `pyth |
+| on    |
+| from  |
+| terra |
+| bot   |
+| impor |
+| t     |
+| Terra |
+| Bot   |
+| from  |
+| terra |
+| bot.e |
+| vents |
+| impor |
+| t     |
+| Event |
+| s     |
++-------+
+| #Crea |
+| te    |
+| a     |
+| Terra |
+| Bot   |
+| objec |
+| t     |
+| bot = |
+| Terra |
+| Bot(' |
+| 127.0 |
+| .0.1' |
+| )     |
+| event |
+| =     |
+| bot.g |
+| et\_e |
+| vent\ |
+| _mana |
+| ger() |
++-------+
+| #Conn |
+| ect   |
+| a     |
+| funct |
+| ion   |
+| to an |
+| event |
+| using |
+| a     |
+| decor |
+| ator  |
+| @even |
+| t.on\ |
+| _even |
+| t(Eve |
+| nts.C |
+| hat)  |
+| def   |
+| chat( |
+| event |
+| \_id, |
+| msg): |
+| #Do   |
+| somet |
+| hing  |
+| with  |
+| the   |
+| messa |
+| ge    |
+| #In   |
+| this  |
+| case, |
+| stop  |
+| the   |
+| bot   |
+| if    |
+| the   |
+| word  |
+| "Stop |
+| "     |
+| occur |
+| s     |
+| print |
+| (msg) |
+| if    |
+| "stop |
+| "     |
+| in    |
+| msg:  |
+| bot.s |
+| top() |
++-------+
+| #Star |
+| t     |
+| the   |
+| bot   |
+| bot.s |
+| tart( |
+| )     |
++-------+
+| #And  |
+| wait  |
+| while |
+| bot.r |
+| unnin |
+| g:    |
+| pass  |
+| \`\`\ |
+| `     |
++-------+
+| More  |
+| examp |
+| les   |
+| can   |
+| be    |
+| found |
+| under |
+| the   |
+| 'exam |
+| ples' |
+| direc |
+| tory. |
+| Also  |
+| check |
+| the   |
+| wiki  |
+| for   |
+| more  |
+| infor |
+| matio |
+| n     |
+| about |
+| the   |
+| inner |
+| worki |
+| ngs   |
+| of    |
+| the   |
+| bot   |
+| and   |
+| how   |
+| to    |
+| inter |
+| face  |
+| with  |
+| it.   |
++-------+
+| Contr |
+| ibuti |
+| ng    |
++-------+
 
-.. code:: python
+If you want to contribute, that's great! I would really appreciate the
+help. Just send a pull request and i'll quickly check and accept it.
+These are some areas that need work:
 
-    from terrabot import TerraBot
-    from terrabot.events import Events
+-  NPC packet parsing
+-  Item dropping
+-  Teleporting other players (>:D)
+-  Synchronizing packets like health and update-player-packets
+-  Placing tiles (!)
 
-    #Create a TerraBot object
-    bot = TerraBot('127.0.0.1')
-    event = bot.get_event_manager()
-
-    #Connect a function to an event using a decorator
-    @event.on_event(Events.Chat)
-    def chat(event_id, msg):
-        #Do something with the message
-        #In this case, stop the bot if the word "Stop" occurs
-        print(msg)
-        if "stop" in msg:
-            bot.stop()
-
-    #Start the bot
-    bot.start()
-
-    #And wait
-    while bot.running:
-    pass
-
-The TerraBot runs in a separate daemon thread. This means that when the
-main thread is gone, the bot will automatically stop. This is why the
-example waits for bot.running to become False.
+For information about the packets, see `this
+link <https://tshock.atlassian.net/wiki/display/TSHOCKPLUGINS/Packet+Documentation>`__.
 
 .. |PyPI version| image:: https://badge.fury.io/py/terrabot.svg
    :target: https://badge.fury.io/py/terrabot
