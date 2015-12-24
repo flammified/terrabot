@@ -53,6 +53,13 @@ class TerraBot(object):
         self.client.add_packet(packets.PacketC(self.player, self.world))
         self.client.add_packet(packets.Packet19(self.player))
 
+    def teleport(self, x, y):
+        self.add_packet(packets.Packet41(self.player.playerID, x, y))
+
+        #Temporary fix until I parse player update data!
+        self.player.x = x
+        self.player.y = y
+
     def message(self, msg, color=None):
         if self.player.logged_in:
             if color:
