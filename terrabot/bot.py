@@ -3,7 +3,6 @@ from . import client
 
 from terrabot.data.player import Player
 from terrabot.data.world import World
-from terrabot.util.worlddrawer import draw_world
 from .events import Events, EventManager
 
 

@@ -1,6 +1,5 @@
 import struct
 from terrabot.util.streamer import Streamer
-import PIL
 
 class Packet14Parser(object):
 
