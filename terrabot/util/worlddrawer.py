@@ -1,11 +1,12 @@
 from PIL import Image, ImageDraw
 from progressbar import *
 
+
 def draw_world(world):
     image = Image.new("RGB", (world.maxX, world.maxY), "white")
     imgdraw = ImageDraw.Draw(image)
     widgets = ['Percentage: ', Percentage(), ' ', Bar(marker=RotatingMarker()),
-           ' ', ETA(), ' Speed: ', FileTransferSpeed()]
+               ' ', ETA(), ' Speed: ', FileTransferSpeed()]
     pbar = ProgressBar(widgets=widgets, maxval=len(world.tiles)).start()
 
     x = 0
