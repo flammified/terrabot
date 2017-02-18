@@ -2,11 +2,12 @@ from terrabot.util.streamer import Streamer
 from terrabot.events.events import Events
 from terrabot.data.item import Item
 
+
 class Packet15Parser(object):
 
 	def parse(self, world, player, data, ev_man):
 		streamer = Streamer(data)
-		streamer.next_byte() #Skip packet byte
+		streamer.next_byte()  # Skip packet byte
 		item_id = streamer.next_short()
 		position = (streamer.next_float(), streamer.next_float())
 		velocity = (streamer.next_float(), streamer.next_float())
