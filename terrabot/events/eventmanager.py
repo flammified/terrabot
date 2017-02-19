@@ -16,14 +16,14 @@ class EventManager(object):
     """
     def on_event(self, event_id):
         def add_wrapper(f):
-            if not event_id in self.event_listeners:
+            if event_id not in self.event_listeners:
                 self.event_listeners[event_id] = []
             self.event_listeners[event_id].append(f)
             return f
         return add_wrapper
 
     def method_on_event(self, event_id, listener):
-        if not event_id in self.event_methods:
+        if event_id not in self.event_methods:
             self.event_methods[event_id] = []
         self.event_methods[event_id].append(listener)
 

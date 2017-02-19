@@ -1,5 +1,6 @@
 from terrabot.events import Events
 
+
 class Packet3Parser(object):
 
     def parse(self, world, player, data, ev_man):

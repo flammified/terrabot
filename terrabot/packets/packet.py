@@ -8,7 +8,7 @@ class Packet(object):
     def __init__(self, packetno, data=None):
         self.packetno = packetno
 
-        #Python default scope bullshit wtf
+        # Python default scope :'/'
         if data is None:
             self.data = bytearray()
         else:
