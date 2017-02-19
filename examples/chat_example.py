@@ -2,7 +2,7 @@ from terrabot import TerraBot
 from terrabot.events import Events
 
 # Create a TerraBot object
-bot = TerraBot('192.168.200.231')
+bot = TerraBot('127.0.0.1')
 event = bot.get_event_manager()
 
 
