@@ -27,7 +27,6 @@ class Client(object):
         self.write_queue = []
         self.client = None
 
-
     def add_packet(self, packet):
         """Add a packet to the queue"""
         self.write_queue.append(packet)
