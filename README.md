@@ -37,25 +37,28 @@ The following is a very basic bot, which will connect and handle chat.
 from terrabot import TerraBot
 from terrabot.events import Events
 
-#Create a TerraBot object
+# Create a TerraBot object
 bot = TerraBot('127.0.0.1')
 event = bot.get_event_manager()
 
-#Connect a function to an event using a decorator
+
+# Connect a function to an event using a decorator
 @event.on_event(Events.Chat)
 def chat(event_id, msg):
-    #Do something with the message
-    #In this case, stop the bot if the word "Stop" occurs
+    # Do something with the message
+    # In this case, stop the bot if the word "Stop" occurs
     print(msg)
     if "stop" in msg:
         bot.stop()
 
-#Start the bot
+
+# Start the bot
 bot.start()
 
-#And wait
-while bot.running:
-pass
+# And wait
+while bot.client.running:
+    pass
+
 ```
 
 More examples can be found under the 'examples' directory. Also check the wiki for more information about the inner workings of the bot and how to interface with it.
